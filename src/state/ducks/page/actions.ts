@@ -7,6 +7,25 @@ export const fetchPageRequest = url => ({
   }
 })
 
+export const fetchPageSuccess = () => ({
+  type: types.FETCH_PAGE_RECEIVED,
+  error: false
+})
+
+export const fetchPageFail = () => ({
+  type: types.FETCH_PAGE_RECEIVED,
+  payload: new Error(),
+  error: true
+})
+
+export const setScrapedData = (data) => ({
+  type: types.SET_SCRAPED_DATA,
+  payload: {
+    data: data
+  }
+})
+
+
 export const fetchPageReceived = (data, error) => {
   if (!error) {
     return {

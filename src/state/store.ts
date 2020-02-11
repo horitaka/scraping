@@ -4,13 +4,16 @@ import { createLogger } from 'redux-logger';
 
 import {
   pageReducer,
-  scrapingReducer,
+  saveReducer,
   rootSaga
 } from "./ducks";
 // import rootSaga from './saga'
 
 export default function configuStore() {
-  const rootReducers = combineReducers( [pageReducer, scrapingReducer] );
+  const rootReducers = combineReducers({
+    page: pageReducer,
+    save: saveReducer
+  });
   const sagaMiddleware = createSagaMiddleware();
 
   const loggerMiddleware = createLogger({
@@ -24,13 +27,6 @@ export default function configuStore() {
   )
 
   sagaMiddleware.run(rootSaga);
-
-  /*
-  const store = createStore(
-    rootReducers,
-    applyMiddleware(loggerMiddleware)
-  )
-  */
 
   return store;
 }

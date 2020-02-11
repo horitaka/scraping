@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-import Scraper from './Scraper/Scraper'
+import Scraper from './Scraper'
 
 const App = () => {
   return (

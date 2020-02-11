@@ -1,15 +1,15 @@
 import { fork } from 'redux-saga/effects'
 
-import { pageReducer, pageSaga } from './page'
-import { scrapingReducer, scrapingSaga } from './scraping'
+import pageReducer, { pageSaga } from './page'
+import saveReducer, { saveSaga } from './save'
 
 function* rootSaga() {
   yield fork(pageSaga)
-  yield fork(scrapingSaga)
+  yield fork(saveSaga)
 }
 
 export {
   pageReducer,
-  scrapingReducer,
+  saveReducer,
   rootSaga,
 }

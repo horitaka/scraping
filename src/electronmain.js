@@ -6,12 +6,14 @@ const os = require('os');
 
 function createWindow () {
   // Create the browser window.
+  console.log(path.join(__dirname, 'preload.js'))
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      // preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: false,
+      contextIsolation: false,
     }
   })
 

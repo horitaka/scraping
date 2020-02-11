@@ -1,8 +1,9 @@
-import { Remote } from 'electron';
+// import { Remote } from 'electron';
 
 declare global {
   interface Window {
     require: any;
+    electron: any;
   }
 }
 
@@ -14,7 +15,8 @@ class PuppeteerHandler {
   constructor() {
     console.log('constructor')
     // const remote: Remote = window.require('electron').remote;
-    this.puppeteer = window.require('electron').remote.require('puppeteer');
+    // this.puppeteer = window.require('electron').remote.require('puppeteer');
+    this.puppeteer = window.electron.remote.require('puppeteer');
     this.browser = null;
     this.page = null;
   }
@@ -44,6 +46,12 @@ class PuppeteerHandler {
     return html
   }
 
+  async getHtmlInFrame(selectorFrame, selectorHtml) {
+    const frame = await this.getFrame(selectorFrame)
+    const html = await frame.evaluate(`(() => (document.querySelector('${selectorHtml}').innerHTML))()`);
+    return html;
+  }
+
   async getText(selector) {
     const text = await this.page.evaluate(`(() => (document.querySelector('${selector}').textContent))()`);
     return text
@@ -55,6 +63,10 @@ class PuppeteerHandler {
     return text;
   }
 
+  replaceLineBrake(str) {
+    const replacedStr = str.replace(/<br>/g, '\n')
+    return replacedStr
+  }
 }
 
 export default PuppeteerHandler;
