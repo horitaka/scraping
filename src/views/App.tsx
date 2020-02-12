@@ -1,14 +1,20 @@
 import React from 'react';
-import './App.css';
+import styled from 'styled-components'
 
 import Scraper from './Scraper'
 
 const App = () => {
   return (
-    <div>
+    <AppContainer>
       <Scraper />
-    </div>
+    </AppContainer>
   );
 }
+
+const AppContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`
 
 export default App;
