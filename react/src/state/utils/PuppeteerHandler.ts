@@ -22,7 +22,9 @@ class PuppeteerHandler {
 
 
   async launch() {
-    this.browser = await this.puppeteer.launch();
+    const executablePath = await this.puppeteer.executablePath()
+    const executablePathUnpacked = executablePath.replace('app.asar', 'app.asar.unpacked')
+    this.browser = await this.puppeteer.launch({executablePath: executablePathUnpacked});
     this.page = await this.browser.newPage();
   }
 
