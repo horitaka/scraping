@@ -1,8 +1,7 @@
 import { call, put, takeEvery, fork } from 'redux-saga/effects'
 
-import { FETCH_PAGE_REQUEST, FETCH_PAGE_RECEIVED } from './types'
+import { FETCH_PAGE_REQUEST } from './types'
 import { fetchPageReceived, setScrapedData } from './operations'
-import PuppeteerHandler from '../../utils/PuppeteerHandler';
 import AmazonPageHandler from '../../utils/AmazonPageHandler'
 
 function* fetchPageRequest(action) {

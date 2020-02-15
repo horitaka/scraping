@@ -1,9 +1,6 @@
 import PuppeteerHandler from './PuppeteerHandler';
 
 class AmazonPageHandler {
-  constructor () {
-
-  }
 
   async getBookInfo(urlList) {
     let data = [];

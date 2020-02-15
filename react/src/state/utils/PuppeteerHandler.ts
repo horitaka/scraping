@@ -13,7 +13,6 @@ class PuppeteerHandler {
   private page;
 
   constructor() {
-    console.log('constructor')
     // const remote: Remote = window.require('electron').remote;
     // this.puppeteer = window.require('electron').remote.require('puppeteer');
     this.puppeteer = window.electron.remote.require('puppeteer');

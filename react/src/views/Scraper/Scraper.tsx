@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
 
-import PuppeteerHandler from '../../state/utils/PuppeteerHandler';
-
-
-
 const Scraper = (props) => {
   const { isFetching, data, onPageFetchClick, onSaveButtonClick } = props;
 
-  // const [url, setUrl] = useState('http://www.example.com')
-  // const [url, setUrl] = useState('https://www.amazon.co.jp/%E3%83%A1%E3%83%A2%E3%81%AE%E9%AD%94%E5%8A%9B-Magic-Memos-NewsPicks-Book-ebook/dp/B07L67XZSS/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1581397348&sr=8-1')
-  const [urlList, setUrl] = useState(new Array('', '', '', '', ''))
+  const [urlList, setUrl] = useState(new Array(5).fill(''))
 
   const handleSubmit = async(event) =>  {
     event.preventDefault();

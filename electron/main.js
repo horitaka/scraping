@@ -21,7 +21,7 @@ function createWindow () {
   let indexHtmlPath = ''
   if (app.isPackaged) {
     indexHtmlPath = url.format({
-      pathname: path.join(__dirname, '/../build/index.html'),
+      pathname: path.join(__dirname, './build/index.html'),
       protocol: 'file:',
       slashes: true
     });
