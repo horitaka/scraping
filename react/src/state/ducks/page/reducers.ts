@@ -18,12 +18,12 @@ const initialState = {
 
 const pageReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.FETCH_PAGE_REQUEST:
+    case types.RUN_SCRAPING:
       return {
         ...state,
         isFetching: true,
       };
-    case types.FETCH_PAGE_RECEIVED:
+    case types.RUN_SCRAPING_FINISHED:
       return {
         ...state,
         isFetching: false,

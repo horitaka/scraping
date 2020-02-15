@@ -65,6 +65,18 @@ class AmazonPageHandler {
     return data
   }
 
+  static getCsvHeader() {
+    return {
+  		url: 'URL',
+  		title: 'タイトル',
+  		author: '著者',
+  		description: '説明文',
+  		category: 'カテゴリ',
+  		page: 'ページ数',
+  		imgLink: '商品画像',
+  	}
+  }
+
 
 }
 

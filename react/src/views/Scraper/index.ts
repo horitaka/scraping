@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onPageFetchClick: (url) => dispatch(pageOperations.fetchPageRequest(url)),
+    onRunScrapingClick: (url) => dispatch(pageOperations.runScraping(url)),
     onSaveButtonClick: () => dispatch(saveOperations.saveToCsvFileRequest())
   }
 }

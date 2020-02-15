@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components'
 
 const Scraper = (props) => {
-  const { isFetching, data, onPageFetchClick, onSaveButtonClick } = props;
+  const { isFetching, data, onRunScrapingClick, onSaveButtonClick } = props;
 
   const [urlList, setUrl] = useState(new Array(5).fill(''))
 
   const handleSubmit = async(event) =>  {
     event.preventDefault();
-    onPageFetchClick(urlList)
+    onRunScrapingClick(urlList)
   }
 
   const handleChange = (event, index) => {

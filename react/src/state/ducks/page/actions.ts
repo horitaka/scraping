@@ -1,19 +1,19 @@
 import * as types from './types'
 
-export const fetchPageRequest = url => ({
-  type: types.FETCH_PAGE_REQUEST,
+export const runScraping = url => ({
+  type: types.RUN_SCRAPING,
   payload: {
     url: url,
   }
 })
 
-export const fetchPageSuccess = () => ({
-  type: types.FETCH_PAGE_RECEIVED,
+export const runScrapingSuccess = () => ({
+  type: types.RUN_SCRAPING_FINISHED,
   error: false
 })
 
-export const fetchPageFail = () => ({
-  type: types.FETCH_PAGE_RECEIVED,
+export const runScrapingPageFail = () => ({
+  type: types.RUN_SCRAPING_FINISHED,
   payload: new Error(),
   error: true
 })
@@ -26,20 +26,20 @@ export const setScrapedData = (data) => ({
 })
 
 
-export const fetchPageReceived = (data, error) => {
-  if (!error) {
-    return {
-      type: types.FETCH_PAGE_RECEIVED,
-      payload: {
-        data: data,
-      },
-      error: error
-    }
-  } else {
-    return {
-      type: types.FETCH_PAGE_RECEIVED,
-      payload: new Error(),
-      error: error
-    }
-  }
-}
+// export const fetchPageReceived = (data, error) => {
+//   if (!error) {
+//     return {
+//       type: types.FETCH_PAGE_RECEIVED,
+//       payload: {
+//         data: data,
+//       },
+//       error: error
+//     }
+//   } else {
+//     return {
+//       type: types.FETCH_PAGE_RECEIVED,
+//       payload: new Error(),
+//       error: error
+//     }
+//   }
+// }

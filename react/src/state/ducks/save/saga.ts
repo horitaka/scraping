@@ -2,18 +2,12 @@ import { call, put, takeEvery, fork, select } from 'redux-saga/effects'
 
 import { SAVE_TO_CSV_FILE_REQUEST } from './types'
 import { pageSelectors } from '../page'
+import AmazonPageHandler from '../../utils/AmazonPageHandler';
 
 function* saveToCsvFile(action) {
 	const stringify = window.electron.remote.require('csv-stringify/lib/sync');
-	const columns = {
-		url: 'URL',
-		title: 'タイトル',
-		author: '著者',
-		description: '説明文',
-		category: 'カテゴリ',
-		page: 'ページ数',
-		imgLink: '商品画像',
-	}
+
+	const columns = AmazonPageHandler.getCsvHeader();
 
 	const scrapedData = yield select(pageSelectors.getScrapedData)
 	const csvData = stringify(scrapedData, {header: true, columns: columns})

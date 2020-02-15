@@ -1,15 +1,15 @@
-import { fetchPageRequest, fetchPageSuccess, fetchPageFail, setScrapedData } from './actions'
+import { runScraping, runScrapingSuccess, runScrapingPageFail, setScrapedData } from './actions'
 
-const fetchPageReceived = (isSuccess) => {
+const runScrapingFinished = (isSuccess) => {
   if (isSuccess) {
-    return fetchPageSuccess()
+    return runScrapingSuccess()
   } else {
-    return fetchPageFail()
+    return runScrapingPageFail()
   }
 }
 
 export {
-  fetchPageRequest,
-  fetchPageReceived,
+  runScraping,
+  runScrapingFinished,
   setScrapedData
 }
