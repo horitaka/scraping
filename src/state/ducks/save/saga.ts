@@ -5,14 +5,34 @@ import { pageSelectors } from '../page'
 
 function* saveToCsvFile(action) {
 	const stringify = window.electron.remote.require('csv-stringify/lib/sync');
+	const columns = {
+		url: 'URL',
+		title: 'タイトル',
+		author: '著者',
+		description: '説明文',
+		category: 'カテゴリ',
+		page: 'ページ数',
+		imgLink: '商品画像',
+	}
 
 	const scrapedData = yield select(pageSelectors.getScrapedData)
-	const csvData = stringify(scrapedData, {header: true})
+	const csvData = stringify(scrapedData, {header: true, columns: columns})
 
-	const a = document.createElement('a');
-	a.href = 'data:text/plain,' + encodeURIComponent(csvData);
-	a.download = 'result.csv';
-	a.click();
+	// const a = document.createElement('a');
+	// a.href = 'data:text/plain,' + encodeURIComponent(csvData);
+	// a.download = 'result.csv';
+	// a.click();
+
+	let bom  = new Uint8Array([0xEF, 0xBB, 0xBF]);
+	let blob = new Blob([bom, csvData], {type: 'text/csv'});
+	let url = (window.URL || window.webkitURL).createObjectURL(blob);
+	let link = document.createElement('a');
+	link.download = 'result.csv';
+	link.href = url;
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+
 }
 
 function* handleSaveToCsvFileRequest() {

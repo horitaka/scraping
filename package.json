@@ -1,5 +1,5 @@
 {
-  "name": "react-redux-typescript-electron-template",
+  "name": "Amazon",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -29,7 +29,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "package": "yarn build && electron-packager . my-app --platform=darwin --arch=x64 --prune --out=release --overwrite",
+    "package": "yarn build && electron-packager . amazon --platform=darwin --arch=x64 --prune --out=release --overwrite --icon=icon.icns",
     "package-all": "yarn build && electron-packager . my-app --platform=all --arch=x64 --prune --out=release --overwrite"
   },
   "main": "src/electronmain.js",

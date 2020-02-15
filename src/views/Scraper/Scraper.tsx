@@ -9,37 +9,49 @@ const Scraper = (props) => {
   const { isFetching, data, onPageFetchClick, onSaveButtonClick } = props;
 
   // const [url, setUrl] = useState('http://www.example.com')
-  const [url, setUrl] = useState('https://www.amazon.co.jp/%E3%83%A1%E3%83%A2%E3%81%AE%E9%AD%94%E5%8A%9B-Magic-Memos-NewsPicks-Book-ebook/dp/B07L67XZSS/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1581397348&sr=8-1')
+  // const [url, setUrl] = useState('https://www.amazon.co.jp/%E3%83%A1%E3%83%A2%E3%81%AE%E9%AD%94%E5%8A%9B-Magic-Memos-NewsPicks-Book-ebook/dp/B07L67XZSS/ref=tmm_kin_swatch_0?_encoding=UTF8&qid=1581397348&sr=8-1')
+  const [urlList, setUrl] = useState(new Array('', '', '', '', ''))
 
   const handleSubmit = async(event) =>  {
     event.preventDefault();
-    onPageFetchClick(url)
+    onPageFetchClick(urlList)
   }
 
-  const handleChange = (event) => {
-    setUrl(event.target.value)
+  const handleChange = (event, index) => {
+    let tmpUrlList = [...urlList]
+    tmpUrlList[index] = event.target.value
+    setUrl(tmpUrlList)
   }
 
   const handleSaveButtonClick = () => {
     onSaveButtonClick()
   }
 
+  // const scrapedList = (
+  //   <List>
+  //     {
+  //       data.map(item => (
+  //         <ListItem key={item.title}>
+  //           <ListItemTitle>{item.title}</ListItemTitle>
+  //           <br></br>
+  //           <ListItemContents>{item.author}</ListItemContents>
+  //           <br></br>
+  //           <ListItemContents>{item.description}</ListItemContents>
+  //         </ListItem>
+  //       ))
+  //     }
+  //   </List>
+  // )
+
   const scrapedList = (
     <List>
       {
         data.map(item => (
-          <ListItem key={item.title}>
-            <ListItemTitle>{item.title}</ListItemTitle>
-            <br></br>
-            <ListItemContents>{item.author}</ListItemContents>
-            <br></br>
-            <ListItemContents>{item.description}</ListItemContents>
-          </ListItem>
+          <ListItemContents key={item.title}>{item.title}<br/>{item.author}</ListItemContents>
         ))
       }
     </List>
   )
-
 
   const loadingMessage = <div>データ取得中...</div>
 
@@ -48,12 +60,19 @@ const Scraper = (props) => {
       <MainForm
         onSubmit={handleSubmit}
       >
-        <MainFormInput
-          type="text"
-          placeholder="URLを入力"
-          value={url}
-          onChange={handleChange}
-        />
+      {
+        urlList.map((url,index) => {
+          return (
+            <MainFormInput
+              type="text"
+              placeholder="URLを入力"
+              value={url}
+              onChange={(event) => handleChange(event, index)}
+              key={index}
+            />
+          )
+        })
+      }
         <MainFormButton>データ取得</MainFormButton>
       </MainForm>
 
@@ -76,13 +95,16 @@ const MainContainer = styled.div`
 
 const MainForm = styled.form`
   display: flex;
+  flex-direction: column;
   flex: 1 1 100%;
   margin-top: 20px;
   margin-bottom: 20px;
 `
 
 const MainFormInput = styled.input`
-  flex: 1 1 80%;
+  // flex: 1 1 80%;
+  margin-bottom:20px;
+  width: 100%
 	height: auto;
 	font-size: 1rem;
 	color: black;
@@ -97,8 +119,9 @@ const MainFormInput = styled.input`
 `
 
 const MainFormButton = styled.button`
-  flex: 0 1 20%;
-
+  // flex: 0 1 20%;
+  width: 20%
+  height: auto;
   padding: 5px;
   background-color: #03A9F4;
   border-radius: 3px;
@@ -116,11 +139,11 @@ const MainFormButton = styled.button`
 const MainSaveContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-botton: 20px;
+  margin-botton: 100px;
 `
 
 const MainSaveButton = styled.button`
-  flex: 0 1 20%;
+  flex: 0 1 100%;
 
   padding: 5px;
   background-color: #03A9F4;
@@ -156,7 +179,7 @@ const ListItemTitle = styled.div`
 `
 
 const ListItemContents = styled.div`
-  margin-left: 20px;
+  margin-top: 20px;
 `
 
 
