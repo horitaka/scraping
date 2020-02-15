@@ -7,6 +7,13 @@ export const runScraping = url => ({
   }
 })
 
+export const updateProgress = data => ({
+  type: types.UPDATE_PROGRESS,
+  payload: {
+    data: data,
+  }
+})
+
 export const runScrapingSuccess = () => ({
   type: types.RUN_SCRAPING_FINISHED,
   error: false

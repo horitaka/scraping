@@ -1,68 +1,77 @@
 import PuppeteerHandler from './PuppeteerHandler';
 
 class AmazonPageHandler {
+  private puppeteer;
 
-  async getBookInfo(urlList) {
-    let data = [];
+  constructor () {
+    this.puppeteer = new PuppeteerHandler();
+  }
 
-    const puppeteer = new PuppeteerHandler();
-  	await puppeteer.launch()
+  async launch() {
+    await this.puppeteer.launch()
+  }
 
-    for (let url of urlList) {
-      if (!url) {
-        break;
-      }
-      await puppeteer.getPage(url)
+  async getBookInfo(url) {
+    // let data = [];
 
-      // Amazonの書籍情報
-      const title = await puppeteer.getText('#ebooksProductTitle')
-      console.log(title)
+    // const puppeteer = new PuppeteerHandler();
+  	// await puppeteer.launch()
 
-      // #bylineInfo > span > span.a-declarative > a.a-link-normal.contributorNameID
-      // #bylineInfo > span > a
-      // #bylineInfo > span:nth-child(1) > a
-      // #bylineInfo > span > span.a-declarative > a.a-link-normal.contributorNameID
-      const author = await puppeteer.getText('#bylineInfo > span > a')
-      console.log(author)
-
-      // #bookDesc_iframe #iframeContent
-      // #bookDesc_iframe #iframeContent
-      const description = await puppeteer.getHtmlInFrame('#bookDesc_iframe', '#iframeContent')
-      const descriptionWithLineBrake = puppeteer.replaceLineBrake(description)
-      console.log(descriptionWithLineBrake)
-
-      // #wayfinding-breadcrumbs_feature_div > ul
-      // #wayfinding-breadcrumbs_feature_div > ul
-      const category = await puppeteer.getInnerText('#wayfinding-breadcrumbs_feature_div > ul')
-      const categoryWithouLineBreake = puppeteer.removeLineBreak(category)
-      console.log(categoryWithouLineBreake)
-
-      // #aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a
-      // #aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a
-      const page = await puppeteer.getText('#aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a')
-      const pageTrimed = page.trim().replace('ページ', '');
-      console.log(pageTrimed)
-
-      // #ebooksImgBlkFront
-      // #ebooksImgBlkFront
-      const imgLink = await puppeteer.getAttr('#ebooksImgBlkFront', 'src')
-      console.log(imgLink)
-
-      data.push({
-        url: url,
-        title: title.trim(),
-        author: author,
-        description: descriptionWithLineBrake,
-        category: categoryWithouLineBreake,
-        page: pageTrimed,
-        imgLink: imgLink,
-      })
-      console.log(data)
+    if (!url) {
+      return {};
     }
+    await this.puppeteer.getPage(url)
 
-  	await puppeteer.close();
+    // Amazonの書籍情報
+    const title = await this.puppeteer.getText('#ebooksProductTitle')
+    console.log(title)
 
+    // #bylineInfo > span > span.a-declarative > a.a-link-normal.contributorNameID
+    // #bylineInfo > span > a
+    // #bylineInfo > span:nth-child(1) > a
+    // #bylineInfo > span > span.a-declarative > a.a-link-normal.contributorNameID
+    const author = await this.puppeteer.getText('#bylineInfo > span > a')
+    console.log(author)
+
+    // #bookDesc_iframe #iframeContent
+    // #bookDesc_iframe #iframeContent
+    const description = await this.puppeteer.getHtmlInFrame('#bookDesc_iframe', '#iframeContent')
+    const descriptionWithLineBrake = this.puppeteer.replaceLineBrake(description)
+    // console.log(descriptionWithLineBrake)
+
+    // #wayfinding-breadcrumbs_feature_div > ul
+    // #wayfinding-breadcrumbs_feature_div > ul
+    const category = await this.puppeteer.getInnerText('#wayfinding-breadcrumbs_feature_div > ul')
+    const categoryWithouLineBreake = this.puppeteer.removeLineBreak(category)
+    console.log(categoryWithouLineBreake)
+
+    // #aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a
+    // #aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a
+    const page = await this.puppeteer.getText('#aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a')
+    const pageTrimed = page.trim().replace('ページ', '');
+    console.log(pageTrimed)
+
+    // #ebooksImgBlkFront
+    // #ebooksImgBlkFront
+    const imgLink = await this.puppeteer.getAttr('#ebooksImgBlkFront', 'src')
+    console.log(imgLink)
+
+    const data = {
+      url: url,
+      title: title.trim(),
+      author: author,
+      description: descriptionWithLineBrake,
+      category: categoryWithouLineBreake,
+      page: pageTrimed,
+      imgLink: imgLink,
+    }
+    console.log(data)
     return data
+
+  }
+
+  async close() {
+    await this.puppeteer.close()
   }
 
   static getCsvHeader() {

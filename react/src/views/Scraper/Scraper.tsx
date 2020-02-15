@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components'
 
 const Scraper = (props) => {
-  const { isFetching, data, onRunScrapingClick, onSaveButtonClick } = props;
+  const { isFetching, data, progress, onRunScrapingClick, onSaveButtonClick } = props;
 
   const [urlList, setUrl] = useState(new Array(5).fill(''))
+  const [isError, setIsError] = useState(new Array(5).fill(false))
+
+  const errorMessage = 'AmazonのURLを入力してください'
 
   const handleSubmit = async(event) =>  {
     event.preventDefault();
@@ -12,13 +15,28 @@ const Scraper = (props) => {
   }
 
   const handleChange = (event, index) => {
+    const url = event.target.value.trim();
+    const isValid = validateUrl(url);
+
+    let tmpIsError = [...isError]
+    tmpIsError[index] = !isValid
+    setIsError(tmpIsError)
+    console.log(isError)
+
     let tmpUrlList = [...urlList]
-    tmpUrlList[index] = event.target.value
+    tmpUrlList[index] = url
     setUrl(tmpUrlList)
   }
 
   const handleSaveButtonClick = () => {
     onSaveButtonClick()
+  }
+
+  // Amazon専用
+  const validateUrl = (url) => {
+    const regExp = /^https:\/\/www.amazon.co.jp.*/;
+    const isValid = regExp.test(url)
+    return isValid;
   }
 
   // const scrapedList = (
@@ -37,7 +55,7 @@ const Scraper = (props) => {
   //   </List>
   // )
 
-  const scrapedList = (
+  const resultMessageRenderer = (
     <List>
       {
         data.map(item => (
@@ -47,7 +65,23 @@ const Scraper = (props) => {
     </List>
   )
 
-  const loadingMessage = <div>データ取得中...</div>
+  // const resultMessageRenderer = (
+  //   <List>
+  //   {
+  //     resultMessage.map((message, index) => (
+  //       <ListItemContents key={index}>{message}<br/></ListItemContents>
+  //     ))
+  //   }
+  //   </List>
+  // )
+
+  // const loadingMessage = <div>データ取得中...</div>
+  const progressMessage = progress.total === 0
+    ? ''
+    : isFetching
+      ? <div>{`データ取得中(${progress.finished}/${progress.total})`}</div>
+      : <div>データ取得完了</div>
+
 
   return (
     <MainContainer>
@@ -57,13 +91,13 @@ const Scraper = (props) => {
       {
         urlList.map((url,index) => {
           return (
-            <MainFormInput
-              type="text"
-              placeholder="URLを入力"
-              value={url}
-              onChange={(event) => handleChange(event, index)}
-              key={index}
-            />
+              <MainFormInput
+                type="text"
+                placeholder="URLを入力"
+                value={url}
+                onChange={(event) => handleChange(event, index)}
+                key={index}
+              />
           )
         })
       }
@@ -75,7 +109,9 @@ const Scraper = (props) => {
       </MainSaveContainer>
 
       <ListContainer>
-        {isFetching ? loadingMessage : scrapedList}
+        {progressMessage}
+        <br/>
+        {resultMessageRenderer}
       </ListContainer>
     </MainContainer>
   );
@@ -176,5 +212,8 @@ const ListItemContents = styled.div`
   margin-top: 20px;
 `
 
+const UrlInputErrorMessage = styled.div`
+  font-size: 1rem;
+`
 
 export default Scraper

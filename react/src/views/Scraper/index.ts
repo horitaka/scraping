@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 
 import { pageOperations } from '../../state/ducks/page'
+import { pageSelectors } from '../../state/ducks/page'
 import { saveOperations } from '../../state/ducks/save'
 import Scraper from './Scraper'
 
@@ -8,6 +9,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     isFetching: state.page.isFetching,
     data: state.page.data,
+    progress: state.page.progress,
+    resultMessage: pageSelectors.getResultMessage(state)
   }
 }
 

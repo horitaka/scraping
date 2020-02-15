@@ -1,4 +1,4 @@
-import { runScraping, runScrapingSuccess, runScrapingPageFail, setScrapedData } from './actions'
+import { runScraping, updateProgress, runScrapingSuccess, runScrapingPageFail, setScrapedData } from './actions'
 
 const runScrapingFinished = (isSuccess) => {
   if (isSuccess) {
@@ -10,6 +10,7 @@ const runScrapingFinished = (isSuccess) => {
 
 export {
   runScraping,
+  updateProgress,
   runScrapingFinished,
   setScrapedData
 }
