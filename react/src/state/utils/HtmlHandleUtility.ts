@@ -3,10 +3,12 @@ export const removeTag = (text, tag) => {
   const bracketIndex = tag.indexOf('<')
 
   const openTag = tag
+  const regExpOpenTag = new RegExp(openTag, 'g');
+  tagRemovedText = text.replace(regExpOpenTag, '')
+
   const endTag = tag.slice(0, bracketIndex+1) + '/' + tag.slice(bracketIndex+1)
-  console.log(endTag)
-  tagRemovedText = text.replace(openTag, '')
-  tagRemovedText = tagRemovedText.replace(endTag, '')
+  const regExpEndTag = new RegExp(endTag, 'g');
+  tagRemovedText = tagRemovedText.replace(regExpEndTag, '')
 
   return tagRemovedText
 }

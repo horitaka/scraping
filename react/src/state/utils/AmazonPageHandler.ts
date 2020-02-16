@@ -34,22 +34,22 @@ class AmazonPageHandler {
     }
 
     const title = await this.getTitle()
-    console.log(title)
+    // console.log(title)
 
     let author = await this.getAuthor()
-    console.log(author)
+    // console.log(author)
 
     const description = await this.getDescription();
-    console.log(description)
+    // console.log(description)
 
     const category = await this.getCategory()
-    console.log(category)
+    // console.log(category)
 
     const pageNum = await this.getPageNum()
-    console.log(pageNum)
+    // console.log(pageNum)
 
     const imgLink = await this.getImgLink()
-    console.log(imgLink)
+    // console.log(imgLink)
 
     const data = {
       url: url,
