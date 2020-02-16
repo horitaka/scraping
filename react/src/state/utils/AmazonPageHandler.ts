@@ -1,4 +1,5 @@
 import PuppeteerHandler from './PuppeteerHandler';
+import * as HtmlHandleUtility from './HtmlHandleUtility'
 
 class AmazonPageHandler {
   private puppeteer;
@@ -86,7 +87,7 @@ class AmazonPageHandler {
     // #wayfinding-breadcrumbs_feature_div > ul
     let category = ''
     category = await this.puppeteer.getInnerText('#wayfinding-breadcrumbs_feature_div > ul')
-    category = this.puppeteer.removeLineBreak(category)
+    category = HtmlHandleUtility.removeLineBreak(category)
     return category
   }
 
@@ -95,11 +96,14 @@ class AmazonPageHandler {
     // #productDescription > p:nth-child(2)
     let description = ''
     description = await this.puppeteer.getHtmlInFrame('#bookDesc_iframe', '#iframeContent')
-    description = this.puppeteer.replaceLineBrake(description)
+    description = HtmlHandleUtility.replaceLineBrake(description)
     if (description === '') {
       description = await this.puppeteer.getHtml('#productDescription > p:nth-child(2)')
-      description = this.puppeteer.replaceLineBrake(description)
+      description = HtmlHandleUtility.replaceLineBrake(description)
     }
+
+    // description = HtmlHandleUtility.removeTag(description, '<b>')
+
     return description;
   }
 

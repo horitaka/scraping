@@ -115,16 +115,6 @@ class PuppeteerHandler {
     }
   }
 
-
-  replaceLineBrake(str) {
-    const replacedStr = str.replace(/<br>/g, '\n')
-    return replacedStr
-  }
-
-  removeLineBreak(str) {
-    const replacedStr = str.replace(/\n/g, '')
-    return replacedStr
-  }
 }
 
 export default PuppeteerHandler;
