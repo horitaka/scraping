@@ -6,11 +6,23 @@ State shape
 page: {
   url: string, // ←　不要?
   isFetching: boolean,
-  obtainedDataByScraping: {
-    data: [],
-    success: boolean,
-    message: string, (ステータスコード+メッセージ)
-  }
+  resultByScraping: [
+    {
+      data: {
+        url: string,
+        title: string,
+        author: string,
+        description: string,
+        category: string,
+        page: number,
+        imgLink: string,
+      }
+      success: boolean,
+      message: string, (ステータスコード+メッセージ)
+    }, {
+      ...
+    }
+  ]
   progress: {
     total: number,
     finished: number,
@@ -21,7 +33,7 @@ page: {
 const initialState = {
   url: '',
   isFetching : false,
-  data: [],
+  resultListByScraping: [],
   progress: {
     total: 0,
     finished: 0,
@@ -35,7 +47,7 @@ const pageReducer = (state = initialState, action) => {
       return {
         ...state,
         isFetching: true,
-        data: [],
+        resultListByScraping: [],
         progress: {
           total: validUrls,
           finished: 0,
@@ -48,18 +60,18 @@ const pageReducer = (state = initialState, action) => {
           ...state.progress,
           finished: state.progress.finished + 1,
         },
-        data: [...state.data, action.payload.data]
+        resultListByScraping: [...state.resultListByScraping, action.payload.resultByScraping]
       }
     case types.RUN_SCRAPING_FINISHED:
       return {
         ...state,
         isFetching: false,
       };
-    case types.SET_SCRAPED_DATA:
-      return {
-        ...state,
-        data: action.payload.data,
-      }
+    // case types.SET_SCRAPED_DATA:
+    //   return {
+    //     ...state,
+    //     data: action.payload.data,
+    //   }
     default:
       return state
 

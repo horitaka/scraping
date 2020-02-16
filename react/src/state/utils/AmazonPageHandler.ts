@@ -15,12 +15,22 @@ class AmazonPageHandler {
   // Amazonの書籍情報
   async getBookInfo(url) {
     if (!url) {
-      return {};
+      return {
+        data: {},
+        success: false,
+        statusCode: 'Unknown',
+        message: 'URLが入力されていません'
+      };
     }
 
     const result = await this.puppeteer.movePageTo(url)
     if (!result.success) {
-      return {}
+      return {
+        ...result,
+        data: {
+          url: url
+        },
+      };
     }
 
     const title = await this.getTitle()
@@ -51,7 +61,10 @@ class AmazonPageHandler {
       imgLink: imgLink,
     }
     console.log(data)
-    return data
+    return {
+      success: true,
+      data: data,
+    }
 
   }
 

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components'
 
 const Scraper = (props) => {
-  const { isFetching, data, progress, onRunScrapingClick, onSaveButtonClick } = props;
+  const { isFetching, resultListByScraping, progress, onRunScrapingClick, onSaveButtonClick } = props;
 
   const [urlList, setUrl] = useState(new Array(10).fill(''))
   const [isError, setIsError] = useState(new Array(10).fill(false))
 
-  const errorMessage = 'AmazonのURLを入力してください'
+  // const errorMessage = 'AmazonのURLを入力してください'
 
   const handleSubmit = async(event) =>  {
     event.preventDefault();
@@ -44,36 +44,39 @@ const Scraper = (props) => {
   //     {
   //       data.map(item => (
   //         <ListItem key={item.title}>
-  //           <ListItemTitle>{item.title}</ListItemTitle>
+  //           <MessageListItemTitle>{item.title}</MessageListItemTitle>
   //           <br></br>
-  //           <ListItemContents>{item.author}</ListItemContents>
+  //           <MessageListItemContents>{item.author}</MessageListItemContents>
   //           <br></br>
-  //           <ListItemContents>{item.description}</ListItemContents>
+  //           <MessageListItemContents>{item.description}</MessageListItemContents>
   //         </ListItem>
   //       ))
   //     }
   //   </List>
   // )
 
-  const resultMessageRenderer = (
-    <List>
+  const resultMessage = (
+    <MessageList>
       {
-        data.map(item => {
-          const title = item.title || 'データが取得できませんでした'
-          const author = item.author || 'データが取得できませんでした'
-          return (
-            <ListItemContents key={title}>{title}<br/>{author}</ListItemContents>
-          )
+        resultListByScraping.map((item, index) => {
+          if (item.success) {
+            const title = item.data.title || 'データが取得できませんでした'
+            const author = item.data.author || 'データが取得できませんでした'
+            return <MessageListItemContents key={index}>{title}<br/>{author}</MessageListItemContents>
+          } else {
+            const message = `${item.statusCode}: ${item.message}`
+            return <MessageListItemContents key={index}>{message}</MessageListItemContents>
+          }
         })
       }
-    </List>
+    </MessageList>
   )
 
   // const resultMessageRenderer = (
   //   <List>
   //   {
   //     resultMessage.map((message, index) => (
-  //       <ListItemContents key={index}>{message}<br/></ListItemContents>
+  //       <MessageListItemContents key={index}>{message}<br/></MessageListItemContents>
   //     ))
   //   }
   //   </List>
@@ -89,13 +92,13 @@ const Scraper = (props) => {
 
   return (
     <MainContainer>
-      <MainForm
+      <UrlForm
         onSubmit={handleSubmit}
       >
       {
         urlList.map((url,index) => {
           return (
-              <MainFormInput
+              <UrlFormInput
                 type="text"
                 placeholder="URLを入力"
                 value={url}
@@ -105,18 +108,18 @@ const Scraper = (props) => {
           )
         })
       }
-        <MainFormButton>データ取得</MainFormButton>
-      </MainForm>
+        <UrlFormButton>データ取得</UrlFormButton>
+      </UrlForm>
 
-      <MainSaveContainer>
-        <MainSaveButton onClick={handleSaveButtonClick}>データ保存</MainSaveButton>
-      </MainSaveContainer>
+      <DataSaveContainer>
+        <DataSaveButton onClick={handleSaveButtonClick}>データ保存</DataSaveButton>
+      </DataSaveContainer>
 
-      <ListContainer>
+      <MessageContainer>
         {progressMessage}
         <br/>
-        {resultMessageRenderer}
-      </ListContainer>
+        {resultMessage}
+      </MessageContainer>
     </MainContainer>
   );
 };
@@ -127,7 +130,7 @@ const MainContainer = styled.div`
   min-width: 450px;
 `
 
-const MainForm = styled.form`
+const UrlForm = styled.form`
   display: flex;
   flex-direction: column;
   flex: 1 1 100%;
@@ -135,7 +138,7 @@ const MainForm = styled.form`
   margin-bottom: 20px;
 `
 
-const MainFormInput = styled.input`
+const UrlFormInput = styled.input`
   // flex: 1 1 80%;
   margin-bottom:20px;
   width: 100%
@@ -152,7 +155,7 @@ const MainFormInput = styled.input`
   }
 `
 
-const MainFormButton = styled.button`
+const UrlFormButton = styled.button`
   // flex: 0 1 20%;
   width: 20%
   height: auto;
@@ -170,13 +173,13 @@ const MainFormButton = styled.button`
   color: white;
 `
 
-const MainSaveContainer = styled.div`
+const DataSaveContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-botton: 100px;
 `
 
-const MainSaveButton = styled.button`
+const DataSaveButton = styled.button`
   flex: 0 1 100%;
 
   padding: 5px;
@@ -193,31 +196,31 @@ const MainSaveButton = styled.button`
   color: white;
 `
 
-const ListContainer = styled.div`
-
+const MessageContainer = styled.div`
+  margin-top: 20px;
 `
 
-const List = styled.ul`
+const MessageList = styled.ul`
   display: flex;
   flex-direction: column;
   list-style: none;
 `
 
-const ListItem = styled.li`
-  flex 1 1 auto;
-  width: 100%;
-`
+// const ListItem = styled.li`
+//   flex 1 1 auto;
+//   width: 100%;
+// `
 
-const ListItemTitle = styled.div`
-  font-weight: bold;
-`
+// const MessageListItemTitle = styled.div`
+//   font-weight: bold;
+// `
 
-const ListItemContents = styled.div`
+const MessageListItemContents = styled.div`
   margin-top: 20px;
 `
 
-const UrlInputErrorMessage = styled.div`
-  font-size: 1rem;
-`
+// const UrlInputErrorMessage = styled.div`
+//   font-size: 1rem;
+// `
 
 export default Scraper

@@ -7,10 +7,10 @@ export const runScraping = url => ({
   }
 })
 
-export const updateProgress = data => ({
+export const updateProgress = resultByScraping => ({
   type: types.UPDATE_PROGRESS,
   payload: {
-    data: data,
+    resultByScraping: resultByScraping,
   }
 })
 

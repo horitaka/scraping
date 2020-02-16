@@ -1,4 +1,4 @@
-import { call, put, takeEvery, fork, select } from 'redux-saga/effects'
+import { takeEvery, fork, select } from 'redux-saga/effects'
 
 import { SAVE_TO_CSV_FILE_REQUEST } from './types'
 import { pageSelectors } from '../page'
@@ -9,7 +9,7 @@ function* saveToCsvFile(action) {
 
 	const columns = AmazonPageHandler.getCsvHeader();
 
-	const scrapedData = yield select(pageSelectors.getScrapedData)
+	const scrapedData = yield select(pageSelectors.getDataByScraping)
 	const csvData = stringify(scrapedData, {header: true, columns: columns})
 
 	// const a = document.createElement('a');
