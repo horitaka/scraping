@@ -11,58 +11,42 @@ class AmazonPageHandler {
     await this.puppeteer.launch()
   }
 
+  // Amazonの書籍情報
   async getBookInfo(url) {
-    // let data = [];
-
-    // const puppeteer = new PuppeteerHandler();
-  	// await puppeteer.launch()
-
     if (!url) {
       return {};
     }
-    await this.puppeteer.getPage(url)
 
-    // Amazonの書籍情報
-    const title = await this.puppeteer.getText('#ebooksProductTitle')
+    const canMoveToPage = await this.puppeteer.movePageTo(url)
+    if (!canMoveToPage) {
+      return {}
+    }
+
+    const title = await this.getTitle()
     console.log(title)
 
-    // #bylineInfo > span > span.a-declarative > a.a-link-normal.contributorNameID
-    // #bylineInfo > span > a
-    // #bylineInfo > span:nth-child(1) > a
-    // #bylineInfo > span > span.a-declarative > a.a-link-normal.contributorNameID
-    const author = await this.puppeteer.getText('#bylineInfo > span > a')
+    let author = await this.getAuthor()
     console.log(author)
 
-    // #bookDesc_iframe #iframeContent
-    // #bookDesc_iframe #iframeContent
-    const description = await this.puppeteer.getHtmlInFrame('#bookDesc_iframe', '#iframeContent')
-    const descriptionWithLineBrake = this.puppeteer.replaceLineBrake(description)
-    // console.log(descriptionWithLineBrake)
+    const description = await this.getDescription();
+    console.log(description)
 
-    // #wayfinding-breadcrumbs_feature_div > ul
-    // #wayfinding-breadcrumbs_feature_div > ul
-    const category = await this.puppeteer.getInnerText('#wayfinding-breadcrumbs_feature_div > ul')
-    const categoryWithouLineBreake = this.puppeteer.removeLineBreak(category)
-    console.log(categoryWithouLineBreake)
+    const category = await this.getCategory()
+    console.log(category)
 
-    // #aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a
-    // #aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a
-    const page = await this.puppeteer.getText('#aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a')
-    const pageTrimed = page.trim().replace('ページ', '');
-    console.log(pageTrimed)
+    const pageNum = await this.getPageNum()
+    console.log(pageNum)
 
-    // #ebooksImgBlkFront
-    // #ebooksImgBlkFront
-    const imgLink = await this.puppeteer.getAttr('#ebooksImgBlkFront', 'src')
+    const imgLink = await this.getImgLink()
     console.log(imgLink)
 
     const data = {
       url: url,
-      title: title.trim(),
+      title: title,
       author: author,
-      description: descriptionWithLineBrake,
-      category: categoryWithouLineBreake,
-      page: pageTrimed,
+      description: description,
+      category: category,
+      page: pageNum,
       imgLink: imgLink,
     }
     console.log(data)
@@ -72,6 +56,78 @@ class AmazonPageHandler {
 
   async close() {
     await this.puppeteer.close()
+  }
+
+
+  async getTitle() {
+    // #ebooksProductTitle
+    // #productTitle
+    let title = ''
+    title = await this.puppeteer.getText('#ebooksProductTitle')
+    if (title === '') {
+      title = await this.puppeteer.getText('#productTitle')
+    }
+    return title
+  }
+
+  async getAuthor() {
+    // #bylineInfo > span > a
+    // #bylineInfo > span:nth-child(1) > a
+    // #bylineInfo > span > span.a-declarative > a.a-link-normal.contributorNameID
+    let author = ''
+    author = await this.puppeteer.getText('#bylineInfo > span > a')
+    if (author === '') {
+      author = await this.puppeteer.getText('#bylineInfo > span > span.a-declarative > a.a-link-normal.contributorNameID')
+    }
+    return author
+  }
+
+  async getCategory() {
+    // #wayfinding-breadcrumbs_feature_div > ul
+    let category = ''
+    category = await this.puppeteer.getInnerText('#wayfinding-breadcrumbs_feature_div > ul')
+    category = this.puppeteer.removeLineBreak(category)
+    return category
+  }
+
+  async getDescription() {
+    // #bookDesc_iframe #iframeContent
+    // #productDescription > p:nth-child(2)
+    let description = ''
+    description = await this.puppeteer.getHtmlInFrame('#bookDesc_iframe', '#iframeContent')
+    description = this.puppeteer.replaceLineBrake(description)
+    if (description === '') {
+      description = await this.puppeteer.getHtml('#productDescription > p:nth-child(2)')
+      description = this.puppeteer.replaceLineBrake(description)
+    }
+    return description;
+  }
+
+  async getImgLink() {
+    // #ebooksImgBlkFront
+    // #imgBlkFront
+    let imgLink = ''
+    imgLink = await this.puppeteer.getAttr('#ebooksImgBlkFront', 'src')
+    if (imgLink === '') {
+      imgLink = await this.puppeteer.getAttr('#imgBlkFront', 'src')
+    }
+    return imgLink
+  }
+
+  async getPageNum() {
+    // #aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a
+    // #detail_bullets_id > table > tbody > tr > td > div > ul > li:nth-child(1)
+    let pageNum: string = ''
+    pageNum = await this.puppeteer.getText('#aboutEbooksSection > table > tbody > tr > td:nth-child(1) > span > a')
+    // pageNum = pageNum.replace('ページ', '');
+    pageNum = this.extractNumber(pageNum)
+    if (pageNum === '') {
+      pageNum = await this.puppeteer.getText('#detail_bullets_id > table > tbody > tr > td > div > ul > li:nth-child(1)')
+      // pageNum = pageNum.replace('単行本: ', '');
+      // pageNum = pageNum.replace('ページ', '');
+      pageNum = this.extractNumber(pageNum)
+    }
+    return pageNum
   }
 
   static getCsvHeader() {
@@ -86,6 +142,14 @@ class AmazonPageHandler {
   	}
   }
 
+  extractNumber(text) {
+    const number = text.match(/\d+/g);
+    if (number) {
+      return number[0]
+    } else {
+      return ''
+    }
+  }
 
 }
 

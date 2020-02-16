@@ -4,8 +4,8 @@ import styled from 'styled-components'
 const Scraper = (props) => {
   const { isFetching, data, progress, onRunScrapingClick, onSaveButtonClick } = props;
 
-  const [urlList, setUrl] = useState(new Array(5).fill(''))
-  const [isError, setIsError] = useState(new Array(5).fill(false))
+  const [urlList, setUrl] = useState(new Array(10).fill(''))
+  const [isError, setIsError] = useState(new Array(10).fill(false))
 
   const errorMessage = 'AmazonのURLを入力してください'
 
@@ -21,7 +21,7 @@ const Scraper = (props) => {
     let tmpIsError = [...isError]
     tmpIsError[index] = !isValid
     setIsError(tmpIsError)
-    console.log(isError)
+    // console.log(isError)
 
     let tmpUrlList = [...urlList]
     tmpUrlList[index] = url
@@ -58,9 +58,13 @@ const Scraper = (props) => {
   const resultMessageRenderer = (
     <List>
       {
-        data.map(item => (
-          <ListItemContents key={item.title}>{item.title}<br/>{item.author}</ListItemContents>
-        ))
+        data.map(item => {
+          const title = item.title || 'データが取得できませんでした'
+          const author = item.author || 'データが取得できませんでした'
+          return (
+            <ListItemContents key={title}>{title}<br/>{author}</ListItemContents>
+          )
+        })
       }
     </List>
   )

@@ -32,63 +32,87 @@ class PuppeteerHandler {
     await this.browser.close()
   }
 
-  async getPage(url) {
-    await this.page.goto(url);
+  async movePageTo(url) {
+    try {
+      await this.page.goto(url);
+      return true;
+    } catch (e) {
+      console.warn(e)
+      return false;
+    }
   }
 
   async getFrame(selector) {
-    const elementHandler = await this.page.$(selector);
-    const frame = await elementHandler.contentFrame();
-    return frame
+    try {
+      const elementHandler = await this.page.$(selector);
+      const frame = await elementHandler.contentFrame();
+      return frame
+    } catch (e) {
+      console.warn(e)
+      return ''
+    }
   }
 
   async getInnerText(selector) {
-    // const elements = await this.page.evaluate(`(() => (document.querySelectorAll('${selector}')))()`);
-    // console.log(elements)
-    // const texts = elements.map(element => element.textContent.trim())
-    // return texts
-
-    // const elements = await this.page.evaluate(`(() => (document.querySelectorAll('#wayfinding-breadcrumbs_feature_div > ul > li')))()`);
-    // const array = Array.from(elements)
-
-    // const array = Array.prototype.slice.call(elements);
-    // console.log(Array.isArray(array))
-    // console.log(array.length)
-
-    // elements.forEach(function (elem) {
-    //   elem.style.backgroundColor = '#f00';
-    //   console.log(elem)
-    // });
-
-    const innerText = await this.page.evaluate(`(() => (document.querySelector('${selector}').innerText))()`);
-    return innerText
+    try {
+      const innerText = await this.page.evaluate(`(() => (document.querySelector('${selector}').innerText))()`);
+      return innerText
+    } catch (e) {
+      console.warn(e)
+      return ''
+    }
   }
 
   async getHtml(selector) {
-    const html = await this.page.evaluate(`(() => (document.querySelector('${selector}').innerHTML))()`);
-    return html
+    try {
+      const html = await this.page.evaluate(`(() => (document.querySelector('${selector}').innerHTML))()`);
+      return html
+    } catch (e) {
+      console.warn(e)
+      return ''
+    }
   }
 
   async getHtmlInFrame(selectorFrame, selectorHtml) {
-    const frame = await this.getFrame(selectorFrame)
-    const html = await frame.evaluate(`(() => (document.querySelector('${selectorHtml}').innerHTML))()`);
-    return html;
+    try {
+      const frame = await this.getFrame(selectorFrame)
+      const html = await frame.evaluate(`(() => (document.querySelector('${selectorHtml}').innerHTML))()`);
+      return html;
+    } catch (e) {
+      console.warn(e)
+      return ''
+    }
   }
 
   async getText(selector) {
-    const text = await this.page.evaluate(`(() => (document.querySelector('${selector}').textContent))()`);
-    return text.trim()
+    try {
+      const text = await this.page.evaluate(`(() => (document.querySelector('${selector}').textContent))()`);
+      return text.trim()
+    } catch(e) {
+      console.warn(e)
+      return ''
+    }
   }
 
   async getTextInFrame(selectorFrame, selectorText) {
-    const frame = await this.getFrame(selectorFrame)
-    const text = await frame.evaluate(`(() => (document.querySelector('${selectorText}').textContent))()`);
-    return text;
+    try {
+      const frame = await this.getFrame(selectorFrame)
+      const text = await frame.evaluate(`(() => (document.querySelector('${selectorText}').textContent))()`);
+      return text;
+    } catch (e) {
+      console.warn(e)
+      return ''
+    }
   }
 
   async getAttr(selector, attr) {
-    const value = await this.page.evaluate(`(() => (document.querySelector('${selector}').${attr}))()`);
-    return value
+    try {
+      const value = await this.page.evaluate(`(() => (document.querySelector('${selector}').${attr}))()`);
+      return value
+    } catch (e) {
+      console.warn(e)
+      return ''
+    }
   }
 
 
