@@ -18,8 +18,8 @@ class AmazonPageHandler {
       return {};
     }
 
-    const canMoveToPage = await this.puppeteer.movePageTo(url)
-    if (!canMoveToPage) {
+    const result = await this.puppeteer.movePageTo(url)
+    if (!result.success) {
       return {}
     }
 
@@ -102,7 +102,7 @@ class AmazonPageHandler {
       description = HtmlHandleUtility.replaceLineBrake(description)
     }
 
-    // description = HtmlHandleUtility.removeTag(description, '<b>')
+    description = HtmlHandleUtility.removeTag(description, '<b>')
 
     return description;
   }

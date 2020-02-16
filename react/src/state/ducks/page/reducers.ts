@@ -6,7 +6,11 @@ State shape
 page: {
   url: string, // ←　不要?
   isFetching: boolean,
-  data: [],
+  obtainedDataByScraping: {
+    data: [],
+    success: boolean,
+    message: string, (ステータスコード+メッセージ)
+  }
   progress: {
     total: number,
     finished: number,

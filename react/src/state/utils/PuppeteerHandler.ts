@@ -34,11 +34,20 @@ class PuppeteerHandler {
 
   async movePageTo(url) {
     try {
-      await this.page.goto(url);
-      return true;
+      const response = await this.page.goto(url);
+
+      return {
+        success: response.ok(),
+        statusCode: response.status(),
+        message: response.statusText(),
+      };
     } catch (e) {
       console.warn(e)
-      return false;
+      return {
+        success: false,
+        statusCode: 'Unknown',
+        message: e.message,
+      };
     }
   }
 
