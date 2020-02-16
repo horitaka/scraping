@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
 
+// import * as testurl from '../../test/testurl'
+
 const Scraper = (props) => {
   const { isFetching, resultListByScraping, progress, onRunScrapingClick, onSaveButtonClick } = props;
 
   const [urlList, setUrl] = useState(new Array(10).fill(''))
-  const [isError, setIsError] = useState(new Array(10).fill(false))
+  // const [urlList, setUrl] = useState(testurl.testUrl1)
+  // const [isError, setIsError] = useState(new Array(10).fill(false))
 
   // const errorMessage = 'AmazonのURLを入力してください'
 
@@ -18,10 +21,9 @@ const Scraper = (props) => {
     const url = event.target.value.trim();
     const isValid = validateUrl(url);
 
-    let tmpIsError = [...isError]
-    tmpIsError[index] = !isValid
-    setIsError(tmpIsError)
-    // console.log(isError)
+    // let tmpIsError = [...isError]
+    // tmpIsError[index] = !isValid
+    // setIsError(tmpIsError)
 
     let tmpUrlList = [...urlList]
     tmpUrlList[index] = url
@@ -60,8 +62,8 @@ const Scraper = (props) => {
       {
         resultListByScraping.map((item, index) => {
           if (item.success) {
-            const title = item.data.title || 'データが取得できませんでした'
-            const author = item.data.author || 'データが取得できませんでした'
+            const title = item.data.title || 'データを取得できませんでした'
+            const author = item.data.author || 'データを取得できませんでした'
             return <MessageListItemContents key={index}>{title}<br/>{author}</MessageListItemContents>
           } else {
             const message = `${item.statusCode}: ${item.message}`
