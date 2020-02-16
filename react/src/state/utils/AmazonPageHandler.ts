@@ -107,11 +107,16 @@ class AmazonPageHandler {
   async getDescription() {
     // #bookDesc_iframe #iframeContent
     // #productDescription > p:nth-child(2)
+    // #productDescription > p:nth-child(19)
     let description = ''
     description = await this.puppeteer.getHtmlInFrame('#bookDesc_iframe', '#iframeContent')
     description = HtmlHandleUtility.replaceLineBrake(description)
     if (description === '') {
       description = await this.puppeteer.getHtml('#productDescription > p:nth-child(2)')
+      description = HtmlHandleUtility.replaceLineBrake(description)
+    }
+    if (description === '') {
+      description = await this.puppeteer.getHtml('#productDescription > p:nth-child(19)')
       description = HtmlHandleUtility.replaceLineBrake(description)
     }
 
