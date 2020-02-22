@@ -6,7 +6,7 @@ import styled from 'styled-components'
 const Scraper = (props) => {
   const { isFetching, resultListByScraping, progress, onRunScrapingClick, onSaveButtonClick } = props;
 
-  const [urlList, setUrl] = useState(new Array(10).fill(''))
+  const [urlList, setUrl] = useState(new Array(5).fill(''))
   // const [urlList, setUrl] = useState(testurl.testUrl1)
   // const [isError, setIsError] = useState(new Array(10).fill(false))
 
@@ -63,8 +63,8 @@ const Scraper = (props) => {
         resultListByScraping.map((item, index) => {
           if (item.success) {
             const title = item.data.title || 'データを取得できませんでした'
-            const author = item.data.author || 'データを取得できませんでした'
-            return <MessageListItemContents key={index}>{title}<br/>{author}</MessageListItemContents>
+            const price = item.data.price || 'データを取得できませんでした'
+            return <MessageListItemContents key={index}>{title}<br/>{price}</MessageListItemContents>
           } else {
             const message = `${item.statusCode}: ${item.message}`
             return <MessageListItemContents key={index}>{message}</MessageListItemContents>
