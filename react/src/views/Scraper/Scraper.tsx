@@ -10,8 +10,6 @@ const Scraper = (props) => {
   // const [urlList, setUrl] = useState(testurl.testUrl1)
   // const [isError, setIsError] = useState(new Array(10).fill(false))
 
-  // const errorMessage = 'AmazonのURLを入力してください'
-
   const handleSubmit = async(event) =>  {
     event.preventDefault();
     onRunScrapingClick(urlList)

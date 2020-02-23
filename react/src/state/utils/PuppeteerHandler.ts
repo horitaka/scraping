@@ -24,8 +24,19 @@ class PuppeteerHandler {
   async launch() {
     const executablePath = await this.puppeteer.executablePath()
     const executablePathUnpacked = executablePath.replace('app.asar', 'app.asar.unpacked')
-    this.browser = await this.puppeteer.launch({executablePath: executablePathUnpacked});
+    const options = {
+      executablePath: executablePathUnpacked,
+      headless: false
+    }
+    this.browser = await this.puppeteer.launch(options);
     this.page = await this.browser.newPage();
+    await this.page.setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.116 Safari/537.36")
+    await this.page.setViewport({
+      width: 1200,
+      height: 800,
+      deviceScaleFactor: 1,
+    });
+
   }
 
   async close() {
@@ -35,7 +46,6 @@ class PuppeteerHandler {
   async movePageTo(url) {
     try {
       const response = await this.page.goto(url);
-
       return {
         success: response.ok(),
         statusCode: response.status(),
@@ -49,6 +59,59 @@ class PuppeteerHandler {
         message: e.message,
       };
     }
+  }
+
+  async waitUntilPageLoaded(url) {
+    await new Promise((resolve) => {
+      this.page.on('load', () => {
+        console.log('load');
+        const currentUrl = this.page.url()
+        console.log(currentUrl)
+        if(currentUrl.startsWith(url)) {
+          this.page.removeAllListeners('load')
+          resolve()
+        }
+      });
+    })
+  }
+
+  // Todo
+  async login() {
+    await this.page.type('#fm-login-id', 'horita629@gmail.com');
+    await this.page.type('#fm-login-password', 'noritake');
+    this.page.click('#login-form > div.fm-btn > button');
+    await this.page.waitForNavigation({timeout: 60000, waitUntil: 'domcontentloaded'});
+
+  }
+
+  // Todo
+  // async getNodeList(selector) {
+  //   // const selector2 = '#root'
+  //   try {
+  //     const rowCount = await this.getChildElementCount('#root > div > div > div.main-content > div.right-menu > div > div.gallery-wrap.product-list > ul')
+  //     console.log(rowCount)
+  //
+  //     let productUrlList = []
+  //     for (let i=1; i<=1; i++) {
+  //       const columnCount = await this.getChildElementCount(`#root > div > div > div.main-content > div.right-menu > div > div.gallery-wrap.product-list > ul > div:nth-child(${i})`)
+  //       console.log(columnCount)
+  //       for (let j=1; j<=columnCount; j++) {
+  //         const url = await this.getAttr(`#root > div > div > div.main-content > div.right-menu > div > div.gallery-wrap.product-list > ul > div:nth-child(${i}) > li:nth-child(${j}) > div > div.product-img > div > a`, 'href')
+  //         console.log(url)
+  //         productUrlList.push(url)
+  //       }
+  //     }
+  //
+  //     return productUrlList
+  //   } catch (e) {
+  //     console.warn(e)
+  //     return ''
+  //   }
+  // }
+
+  async getChildElementCount(selector) {
+    const count = await this.page.evaluate(`(() => (document.querySelector('${selector}').childElementCount))()`);
+    return count
   }
 
   async getFrame(selector) {

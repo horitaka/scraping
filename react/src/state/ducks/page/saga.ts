@@ -22,8 +22,10 @@ function* runScraping(action) {
 	// AliExpress商品情報
 	const aliExpress = new AliExpressPageHandler()
 	yield call(aliExpress.launch.bind(aliExpress));
-	for (let url of urlList) {
-		const resultByScraping = yield call(aliExpress.getProductInfo.bind(aliExpress), url)
+	const productUrlList = yield call(aliExpress.getProductUrlList.bind(aliExpress));
+	console.log(productUrlList)
+	for (let productUrl of productUrlList) {
+		const resultByScraping = yield call(aliExpress.getProductInfo.bind(aliExpress), productUrl)
 		yield put(updateProgress(resultByScraping));
 	}
 	yield call(aliExpress.close.bind(aliExpress));

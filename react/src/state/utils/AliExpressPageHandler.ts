@@ -1,5 +1,5 @@
 import PuppeteerHandler from './PuppeteerHandler';
-import * as HtmlHandleUtility from './HtmlHandleUtility'
+// import * as HtmlHandleUtility from './HtmlHandleUtility'
 
 class AliExpressPageHandler {
   private puppeteer;
@@ -10,9 +10,33 @@ class AliExpressPageHandler {
 
   async launch() {
     await this.puppeteer.launch()
+    await this.waitUntilProductListPageLoaded();
   }
 
-  // Amazonの書籍情報
+  async waitUntilProductListPageLoaded() {
+    await this.puppeteer.movePageTo('https://ja.aliexpress.com/');
+    await this.puppeteer.waitUntilPageLoaded('https://www.aliexpress.com/category/')
+  }
+
+  async getProductUrlList() {
+    const rowCount = await this.puppeteer.getChildElementCount('#root > div > div > div.main-content > div.right-menu > div > div.gallery-wrap.product-list > ul')
+    console.log(rowCount)
+
+    let productUrlList = []
+    for (let i=1; i<=1; i++) {
+      const columnCount = await this.puppeteer.getChildElementCount(`#root > div > div > div.main-content > div.right-menu > div > div.gallery-wrap.product-list > ul > div:nth-child(${i})`)
+      console.log(columnCount)
+      for (let j=1; j<=columnCount; j++) {
+        const url = await this.puppeteer.getAttr(`#root > div > div > div.main-content > div.right-menu > div > div.gallery-wrap.product-list > ul > div:nth-child(${i}) > li:nth-child(${j}) > div > div.product-img > div > a`, 'href')
+        console.log(url)
+        productUrlList.push(url)
+      }
+    }
+
+    return productUrlList
+  }
+
+  // AliExpressの商品情報
   async getProductInfo(url) {
     if (!url) {
       return {
@@ -36,6 +60,10 @@ class AliExpressPageHandler {
     const title = await this.getTitle()
     // console.log(title)
 
+    const skuInfo = await.this.getSkuInfo()
+
+    const productDescription = await.this.getProductDescription()
+
     const price = await this.getPrice();
     // console.log(description)
 
@@ -48,6 +76,8 @@ class AliExpressPageHandler {
     const data = {
       url: url,
       title: title,
+      skuInfo: skuInfo,
+      productDescription: productDescription,
       price: price,
       imgLink: imgLink,
     }
@@ -77,6 +107,18 @@ class AliExpressPageHandler {
     let price = ''
     price = await this.puppeteer.getText('#root > div > div.product-main > div > div.product-info > div.product-price > div > span')
     return price;
+  }
+
+  async getSkuInfo() {
+    // #root > div > div.product-main > div > div.product-info > div.product-sku > div
+    let skuInfoHtml = await this.puppeteer.getHtml('#root > div > div.product-main > div > div.product-info > div.product-sku > div')
+    return skuInfoHtml
+  }
+
+  async getProductDescription() {
+    // #product-description
+    let productDescription = await this.puppeteer.getHtml('#product-description')
+    return productDescription
   }
 
   async getImgLink() {
