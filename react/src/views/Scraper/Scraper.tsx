@@ -61,8 +61,8 @@ const Scraper = (props) => {
         resultListByScraping.map((item, index) => {
           if (item.success) {
             const title = item.data.title || 'データを取得できませんでした'
-            const price = item.data.price || 'データを取得できませんでした'
-            return <MessageListItemContents key={index}>{title}<br/>{price}</MessageListItemContents>
+            const author = item.data.author || 'データを取得できませんでした'
+            return <MessageListItemContents key={index}>{title}<br/>{author}</MessageListItemContents>
           } else {
             const message = `${item.statusCode}: ${item.message}`
             return <MessageListItemContents key={index}>{message}</MessageListItemContents>

@@ -12,6 +12,32 @@ class AmazonPageHandler {
     await this.puppeteer.launch()
   }
 
+  async getProductPageUrlList(productListPageUrl) {
+    // #search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a
+
+    // #search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a
+
+    let productPageUrlList = []
+
+    const result = await this.puppeteer.movePageTo(productListPageUrl)
+    const productCount = await this.puppeteer.getChildElementCount('#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row')
+    console.log(productCount)
+
+    // for (let i=1; i <= productCount; i++) {
+    for (let i=1; i < 10; i++) {
+      let productPageUrl = ''
+      productPageUrl = await this.puppeteer.getAttr(`#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a`, 'href')
+      console.log(productPageUrl)
+      if (productPageUrl === '') {
+        productPageUrl = await this.puppeteer.getAttr(`#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a`, 'href')
+      }
+      console.log(productPageUrl)
+      productPageUrlList.push(productPageUrl)
+    }
+
+    return productPageUrlList
+  }
+
   // Amazonの書籍情報
   async getBookInfo(url) {
     if (!url) {

@@ -84,6 +84,34 @@ class PuppeteerHandler {
 
   }
 
+  async scrollByWindowHeight() {
+    await this.page.evaluate(`(() => {
+      var height = document.documentElement.clientHeight;
+      window.scrollBy(0, height);
+    })()`);
+  }
+
+  async scrollToBottom() {
+    const {documentHeight, windowHeight} = await this.page.evaluate(`(() => {
+      var documentHeight = document.documentElement.scrollHeight;
+      var windowHeight = document.documentElement.clientHeight;
+      return {documentHeight, windowHeight}
+    })()`);
+    const pageCount = Math.ceil(documentHeight / windowHeight);
+
+    for (let i=0; i<pageCount; i++) {
+      await this.scrollByWindowHeight();
+      await this.sleep(1000)
+    }
+  }
+
+  async sleep(msec) {
+    await new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, msec)
+    })
+  }
   // Todo
   // async getNodeList(selector) {
   //   // const selector2 = '#root'

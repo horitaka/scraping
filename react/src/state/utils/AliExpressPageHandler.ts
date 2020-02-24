@@ -15,7 +15,7 @@ class AliExpressPageHandler {
 
   async waitUntilProductListPageLoaded() {
     await this.puppeteer.movePageTo('https://ja.aliexpress.com/');
-    await this.puppeteer.waitUntilPageLoaded('https://www.aliexpress.com/category/')
+    // await this.puppeteer.waitUntilPageLoaded('https://www.aliexpress.com/category/')
   }
 
   async getProductUrlList() {
@@ -57,12 +57,15 @@ class AliExpressPageHandler {
       };
     }
 
+    await this.puppeteer.scrollToBottom()
+    await this.puppeteer.sleep(2000)
+
     const title = await this.getTitle()
     // console.log(title)
 
-    const skuInfo = await.this.getSkuInfo()
+    const skuInfo = await this.getSkuInfo()
 
-    const productDescription = await.this.getProductDescription()
+    const productDescription = await this.getProductDescription()
 
     const price = await this.getPrice();
     // console.log(description)
