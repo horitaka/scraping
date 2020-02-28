@@ -4,7 +4,7 @@ import styled from 'styled-components'
 // import * as testurl from '../../test/testurl'
 
 const Scraper = (props) => {
-  const { isFetching, resultListByScraping, progress, onRunScrapingClick, onSaveButtonClick } = props;
+  const { isFetching, resultListByScraping, progress, setListPageUrls, onRunScrapingClick, onSaveButtonClick } = props;
 
   const [urlList, setUrl] = useState(new Array(5).fill(''))
   // const [urlList, setUrl] = useState(testurl.testUrl1)
@@ -12,7 +12,9 @@ const Scraper = (props) => {
 
   const handleSubmit = async(event) =>  {
     event.preventDefault();
-    onRunScrapingClick(urlList)
+    const validUrls = urlList.filter(url => url !== '')
+    setListPageUrls(validUrls)
+    onRunScrapingClick()
   }
 
   const handleChange = (event, index) => {
@@ -83,12 +85,16 @@ const Scraper = (props) => {
   // )
 
   // const loadingMessage = <div>データ取得中...</div>
-  const progressMessage = progress.total === 0
-    ? ''
-    : isFetching
-      ? <div>{`データ取得中(${progress.finished}/${progress.total})`}</div>
+  // const progressMessage = progress.listPageFinished === 0
+  //   ? ''
+  //   : isFetching
+  //     ? <div>{`データ取得中-${progress.listPageFinished+1}ページ-${progress.detailPageFinished}`}</div>
+  //     : <div>データ取得完了</div>
+  const progressMessage = !isFetching
+    ? progress.listPageFinished === 0
+      ? ''
       : <div>データ取得完了</div>
-
+    : <div>{`データ取得中-${progress.listPageFinished+1}ページ-${progress.detailPageFinished}`}</div>
 
   return (
     <MainContainer>

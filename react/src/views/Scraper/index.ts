@@ -15,7 +15,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onRunScrapingClick: (url) => dispatch(pageOperations.runScraping(url)),
+    setListPageUrls: (urls) => dispatch(pageOperations.setListPageUrls(urls)),
+    onRunScrapingClick: () => dispatch(pageOperations.runScraping()),
     onSaveButtonClick: () => dispatch(saveOperations.saveToCsvFileRequest())
   }
 }

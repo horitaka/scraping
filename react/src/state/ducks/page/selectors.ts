@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 
 
 export const getResultListByScraping = state => state.page.resultListByScraping
+export const getListPageUrls = state => state.page.listPageUrls
 
 export const getDataByScraping = createSelector(
   [getResultListByScraping],

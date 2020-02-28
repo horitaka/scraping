@@ -1,4 +1,19 @@
-import { runScraping, updateProgress, runScrapingSuccess, runScrapingPageFail, setScrapedData } from './actions'
+import {
+  runScraping,
+  runScrapingSuccess,
+  runScrapingPageFail,
+
+  setListPageUrls,
+  resetListPageProgress,
+  updateListPageProgress,
+
+  setDetailPageUrls,
+  resetDetailPageProgress,
+  updateDetailPageProgress,
+  // setScrapedData,
+} from './actions'
+
+// import * as actions from './actions'
 
 const runScrapingFinished = (isSuccess) => {
   if (isSuccess) {
@@ -10,7 +25,16 @@ const runScrapingFinished = (isSuccess) => {
 
 export {
   runScraping,
-  updateProgress,
   runScrapingFinished,
-  setScrapedData
+
+  setListPageUrls,
+  resetListPageProgress,
+  updateListPageProgress,
+
+  setDetailPageUrls,
+  resetDetailPageProgress,
+  updateDetailPageProgress,
+  // setScrapedData,
 }
+
+// export * from './actions'

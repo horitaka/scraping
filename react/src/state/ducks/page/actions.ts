@@ -1,17 +1,7 @@
 import * as types from './types'
 
-export const runScraping = url => ({
+export const runScraping = () => ({
   type: types.RUN_SCRAPING,
-  payload: {
-    url: url,
-  }
-})
-
-export const updateProgress = resultByScraping => ({
-  type: types.UPDATE_PROGRESS,
-  payload: {
-    resultByScraping: resultByScraping,
-  }
 })
 
 export const runScrapingSuccess = () => ({
@@ -25,12 +15,49 @@ export const runScrapingPageFail = () => ({
   error: true
 })
 
-export const setScrapedData = (data) => ({
-  type: types.SET_SCRAPED_DATA,
+
+export const setListPageUrls = (listPageUrls) => ({
+  type: types.SET_LIST_PAGE_URLS,
   payload: {
-    data: data
+    listPageUrls: listPageUrls
   }
 })
+
+export const resetListPageProgress = () => ({
+  type: types.RESET_LIST_PAGE_PROGRESS,
+})
+
+export const updateListPageProgress = () => ({
+  type: types.UPDATE_LIST_PAGE_PROGRESS,
+})
+
+
+export const setDetailPageUrls = (listPageUrl, detailPageUrls) => ({
+  type: types.SET_DETAIL_PAGE_URLS,
+  payload: {
+    listPageUrl: listPageUrl,
+    detailPageUrls: detailPageUrls
+  }
+})
+
+export const resetDetailPageProgress = () => ({
+  type: types.RESET_DETAIL_PAGE_PROGRESS,
+})
+
+export const updateDetailPageProgress = resultByScraping => ({
+  type: types.UPDATE_DETAIL_PAGE_PROGRESS,
+  payload: {
+    resultByScraping: resultByScraping,
+  }
+})
+
+
+// export const setScrapedData = (data) => ({
+//   type: types.SET_SCRAPED_DATA,
+//   payload: {
+//     data: data
+//   }
+// })
 
 
 // export const fetchPageReceived = (data, error) => {

@@ -5,6 +5,7 @@ import { pageSelectors } from '../page'
 
 import AmazonPageHandler from '../../utils/AmazonPageHandler';
 // import AliExpressPageHandler from '../../utils/AliExpressPageHandler'
+// import PatentScopePageHandler from '../../utils/PatentScopePageHandler'
 
 
 function* saveToCsvFile(action) {

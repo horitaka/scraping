@@ -1,15 +1,21 @@
-import { call, put, takeEvery, fork } from 'redux-saga/effects'
+import { call, put, select, takeEvery, fork } from 'redux-saga/effects'
 
 import { RUN_SCRAPING } from './types'
-import { updateProgress, runScrapingFinished } from './operations'
+import {
+	runScrapingFinished,
+	resetListPageProgress,
+	updateListPageProgress,
+	setDetailPageUrls,
+	resetDetailPageProgress,
+	updateDetailPageProgress,
+} from './operations'
+import { getListPageUrls } from './selectors'
 
 import AmazonPageHandler from '../../utils/AmazonPageHandler'
 // import AliExpressPageHandler from '../../utils/AliExpressPageHandler'
+import PatentScopePageHandler from '../../utils/PatentScopePageHandler'
 
 function* runScraping(action) {
-	// let data = [];
-	const urlList = action.payload.url.filter(url => url !== '');
-
 	// Amazon書籍情報
 	// const amazon = new AmazonPageHandler()
 	// yield call(amazon.launch.bind(amazon));
@@ -20,19 +26,20 @@ function* runScraping(action) {
 	// yield call(amazon.close.bind(amazon));
 
 	// Amazon一覧ページからの書籍情報取得
-	const amazon = new AmazonPageHandler()
-	yield call(amazon.launch.bind(amazon))
-	for (let productListPageUrl of urlList) {
-		const productPageUrlList = yield call(amazon.getProductPageUrlList.bind(amazon), productListPageUrl)
-		console.log(productPageUrlList)
-		for (let productPageUrl of productPageUrlList) {
-			const resultByScraping = yield call(amazon.getBookInfo.bind(amazon), productPageUrl)
-			yield put(updateProgress(resultByScraping));
+	yield runScrapingAmazonBooksBulk()
 
-		}
-	}
-	yield call(amazon.close.bind(amazon));
 
+	// PatentScope
+	// const patent = new PatentScopePageHandler()
+	// yield call(patent.launch.bind(patent))
+	// const productPageUrlList = yield call(patent.getProductPageUrlList.bind(patent), '')
+	// console.log(productPageUrlList)
+	// for (let productPageUrl of productPageUrlList) {
+	// 	const resultByScraping = yield call(patent.getBookInfo.bind(patent), productPageUrl)
+	// 	yield put(updateProgress(resultByScraping));
+	//
+	// }
+	// yield call(patent.close.bind(patent));
 
 	// AliExpress商品情報
 	// const aliExpress = new AliExpressPageHandler()
@@ -56,4 +63,27 @@ function* handleRunScraping() {
 
 export default function* saga() {
   yield fork(handleRunScraping);
+}
+
+function* runScrapingAmazonBooksBulk() {
+	const amazon = new AmazonPageHandler()
+	yield call(amazon.launch.bind(amazon))
+
+	const listPageUrls = yield select(getListPageUrls)
+
+	yield put(resetListPageProgress())
+	for (let listPageUrl of listPageUrls) {
+		const detailPageUrls = yield call(amazon.getProductPageUrlList.bind(amazon), listPageUrl)
+		yield put(setDetailPageUrls(listPageUrl, detailPageUrls))
+
+		yield put(resetDetailPageProgress())
+		for (let productPageUrl of detailPageUrls) {
+			const resultByScraping = yield call(amazon.getBookInfo.bind(amazon), productPageUrl)
+			yield put(updateDetailPageProgress(resultByScraping));
+		}
+		yield put(updateListPageProgress())
+
+	}
+
+	yield call(amazon.close.bind(amazon));
 }

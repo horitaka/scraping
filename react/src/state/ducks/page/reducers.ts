@@ -5,6 +5,12 @@ State shape
 
 page: {
   url: string, // ←　不要?
+  listPageUrls: [],
+  detailPageUrls: {
+    listPageUrlA: [],
+    listPageUrlB: [],
+    ...
+  },
   isFetching: boolean,
   resultByScraping: [
     {
@@ -24,41 +30,66 @@ page: {
     }
   ]
   progress: {
-    total: number,
-    finished: number,
+    listPageFinished: number,
+    detailPageFinished: number,
   }
 }
 */
 
 const initialState = {
-  url: '',
+  listPageUrls: [],
+  detailPageUrls: {},
   isFetching : false,
   resultListByScraping: [],
   progress: {
-    total: 0,
-    finished: 0,
+    listPageFinished: 0,
+    detailPageFinished: 0,
   }
 }
 
 const pageReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.RUN_SCRAPING:
-      const validUrls = action.payload.url.filter(url => url !== '').length
+      // const validUrls = action.payload.url.filter(url => url !== '').length
       return {
         ...state,
         isFetching: true,
         resultListByScraping: [],
         progress: {
-          total: validUrls,
-          finished: 0,
+          listPageFinished: 0,
+          detailPageFinished: 0,
         }
       };
-    case types.UPDATE_PROGRESS:
+    case types.RESET_LIST_PAGE_PROGRESS:
       return {
         ...state,
         progress: {
           ...state.progress,
-          finished: state.progress.finished + 1,
+          listPageFinished: 0,
+        }
+      }
+    case types.UPDATE_LIST_PAGE_PROGRESS:
+      return {
+        ...state,
+        progress: {
+          ...state.progress,
+          listPageFinished: state.progress.listPageFinished + 1,
+        },
+      }
+    case types.RESET_DETAIL_PAGE_PROGRESS:
+      return {
+        ...state,
+        progress: {
+          ...state.progress,
+          detailPageFinished: 0,
+        }
+      }
+    case types.UPDATE_DETAIL_PAGE_PROGRESS:
+      return {
+        ...state,
+        progress: {
+          ...state.progress,
+          detailPageFinished: state.progress.detailPageFinished + 1,
         },
         resultListByScraping: [...state.resultListByScraping, action.payload.resultByScraping]
       }
@@ -67,11 +98,19 @@ const pageReducer = (state = initialState, action) => {
         ...state,
         isFetching: false,
       };
-    // case types.SET_SCRAPED_DATA:
-    //   return {
-    //     ...state,
-    //     data: action.payload.data,
-    //   }
+    case types.SET_LIST_PAGE_URLS:
+      return {
+        ...state,
+        listPageUrls: action.payload.listPageUrls.slice()
+      }
+    case types.SET_DETAIL_PAGE_URLS:
+      return {
+        ...state,
+        detailPageUrls: {
+          ...state.detailPageUrls,
+          [action.payload.listPageUrl]: action.payload.detailPageUrls.slice()
+        }
+      }
     default:
       return state
 
