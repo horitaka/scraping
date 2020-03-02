@@ -21,7 +21,7 @@ class PuppeteerHandler {
   }
 
 
-  async launch() {
+  async launch(domain) {
     const executablePath = await this.puppeteer.executablePath()
     const executablePathUnpacked = executablePath.replace('app.asar', 'app.asar.unpacked')
     const options = {
@@ -37,10 +37,32 @@ class PuppeteerHandler {
       deviceScaleFactor: 1,
     });
 
+    // const cookie = window.localStorage.getItem(domain)
+    // console.log(cookie)
+    // if (!cookie) {
+    //   await page.setCookie(cookie)
+    // }
   }
 
-  async close() {
+  async close(domain) {
+    // const newCookie = await page.cookies(domain)
+    // console.log(newCookie)
+    // localStorage.setItme(domain, newCookie[0])
     await this.browser.close()
+  }
+
+  async loadCookie(siteName) {
+    const cookies = JSON.parse(window.localStorage.getItem(siteName))
+    if (cookies) {
+      await this.page.setCookie(...cookies)
+    }
+  }
+
+  async saveCookie(siteName, cookie) {
+    const cookies = await this.page.cookies()
+    if (cookies) {
+      window.localStorage.setItem(siteName, JSON.stringify(cookies))
+    }
   }
 
   async movePageTo(url) {
@@ -75,6 +97,10 @@ class PuppeteerHandler {
     })
   }
 
+  async getUrl() {
+    return this.page.url()
+  }
+
   // Todo
   async login() {
     await this.page.type('#fm-login-id', 'horita629@gmail.com');
@@ -92,17 +118,30 @@ class PuppeteerHandler {
   }
 
   async scrollToBottom() {
-    const {documentHeight, windowHeight} = await this.page.evaluate(`(() => {
-      var documentHeight = document.documentElement.scrollHeight;
-      var windowHeight = document.documentElement.clientHeight;
-      return {documentHeight, windowHeight}
-    })()`);
-    const pageCount = Math.ceil(documentHeight / windowHeight);
+    let documentHeight = 1;
+    let windowHeight = 0;
+    let positionY = 0;
 
-    for (let i=0; i<pageCount; i++) {
+    while (positionY < documentHeight - windowHeight) {
       await this.scrollByWindowHeight();
-      await this.sleep(1000)
+      await this.page.waitFor(1000);
+      const result = await this.page.evaluate(`(() => {
+        var documentHeight = document.documentElement.scrollHeight;
+        var windowHeight = document.documentElement.clientHeight;
+        var positionY = document.documentElement.scrollTop
+        return {documentHeight, windowHeight, positionY}
+      })()`);
+      documentHeight = result.documentHeight
+      windowHeight = result.windowHeight
+      positionY = result.positionY
+      console.log(result)
     }
+    // const pageCount = Math.ceil(documentHeight / windowHeight);
+    //
+    // for (let i=0; i<pageCount; i++) {
+    //   await this.scrollByWindowHeight();
+    //   await this.page.waitFor(1000)
+    // }
   }
 
   async sleep(msec) {
@@ -137,8 +176,36 @@ class PuppeteerHandler {
   //   }
   // }
 
+  async click(selector) {
+    try {
+      await this.page.click(selector);
+    } catch (e) {
+      console.warn(e)
+    }
+  }
+
+  async test() {
+    const selector1 = '#root > div > div.product-main > div > div.product-info > div.product-sku > div > div > ul > li'
+    const node1 = await this.page.evaluate(`(() => (document.querySelectorAll('${selector1}')))()`);
+    console.log(node1)
+
+    const selector2 = '#root > div > div.product-main > div > div.product-info > div.product-sku > div > div > ul'
+    const node2 = await this.page.evaluate(`(() => (document.querySelector('${selector2}')))()`);
+    console.log(node2)
+
+    const selector3 = '#root > div > div.product-main > div > div.product-info > div.product-sku > div > div > ul'
+    const count = await this.getChildElementCount(selector3)
+    console.log(count)
+
+  }
+
   async getChildElementCount(selector) {
-    const count = await this.page.evaluate(`(() => (document.querySelector('${selector}').childElementCount))()`);
+    let count
+    try {
+      count = await this.page.evaluate(`(() => (document.querySelector('${selector}').childElementCount))()`);
+    } catch(e) {
+      console.warn(e)
+    }
     return count
   }
 

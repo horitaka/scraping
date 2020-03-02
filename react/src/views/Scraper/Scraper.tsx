@@ -64,7 +64,7 @@ const Scraper = (props) => {
           if (item.success) {
             const title = item.data.title || 'データを取得できませんでした'
             const author = item.data.author || 'データを取得できませんでした'
-            return <MessageListItemContents key={index}>{title}<br/>{author}</MessageListItemContents>
+            return <MessageListItemContents key={index}>{title}</MessageListItemContents>
           } else {
             const message = `${item.statusCode}: ${item.message}`
             return <MessageListItemContents key={index}>{message}</MessageListItemContents>

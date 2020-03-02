@@ -76,6 +76,11 @@ const pageReducer = (state = initialState, action) => {
           listPageFinished: state.progress.listPageFinished + 1,
         },
       }
+    case types.SET_LIST_PAGE_URLS:
+      return {
+        ...state,
+        listPageUrls: action.payload.listPageUrls.slice()
+      }
     case types.RESET_DETAIL_PAGE_PROGRESS:
       return {
         ...state,
@@ -93,6 +98,14 @@ const pageReducer = (state = initialState, action) => {
         },
         resultListByScraping: [...state.resultListByScraping, action.payload.resultByScraping]
       }
+    case types.SET_DETAIL_PAGE_URLS:
+      return {
+        ...state,
+        detailPageUrls: {
+          ...state.detailPageUrls,
+          [action.payload.listPageUrl]: action.payload.detailPageUrls.slice()
+        }
+      }
     case types.RUN_SCRAPING_FINISHED:
       return {
         ...state,
@@ -102,14 +115,6 @@ const pageReducer = (state = initialState, action) => {
       return {
         ...state,
         listPageUrls: action.payload.listPageUrls.slice()
-      }
-    case types.SET_DETAIL_PAGE_URLS:
-      return {
-        ...state,
-        detailPageUrls: {
-          ...state.detailPageUrls,
-          [action.payload.listPageUrl]: action.payload.detailPageUrls.slice()
-        }
       }
     default:
       return state

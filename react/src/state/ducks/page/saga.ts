@@ -3,6 +3,7 @@ import { call, put, select, takeEvery, fork } from 'redux-saga/effects'
 import { RUN_SCRAPING } from './types'
 import {
 	runScrapingFinished,
+	setListPageUrls,
 	resetListPageProgress,
 	updateListPageProgress,
 	setDetailPageUrls,
@@ -12,8 +13,8 @@ import {
 import { getListPageUrls } from './selectors'
 
 import AmazonPageHandler from '../../utils/AmazonPageHandler'
-// import AliExpressPageHandler from '../../utils/AliExpressPageHandler'
-import PatentScopePageHandler from '../../utils/PatentScopePageHandler'
+import AliExpressPageHandler from '../../utils/AliExpressPageHandler'
+// import PatentScopePageHandler from '../../utils/PatentScopePageHandler'
 
 function* runScraping(action) {
 	// Amazon書籍情報
@@ -42,16 +43,7 @@ function* runScraping(action) {
 	// yield call(patent.close.bind(patent));
 
 	// AliExpress商品情報
-	// const aliExpress = new AliExpressPageHandler()
-	// yield call(aliExpress.launch.bind(aliExpress));
-	// const productUrlList = yield call(aliExpress.getProductUrlList.bind(aliExpress));
-	// console.log(productUrlList)
-	// // const productUrlList = ['https://ja.aliexpress.com/item/32854844856.html?spm=a2g0o.productlist.0.0.513b6924gwZoUk&algo_pvid=158d7cd6-a31b-47c9-9372-835b11fabfc5&algo_expid=158d7cd6-a31b-47c9-9372-835b11fabfc5-0&btsid=0ab6f83a15824406628703470e5ba4&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_']
-	// for (let productUrl of productUrlList) {
-	// 	const resultByScraping = yield call(aliExpress.getProductInfo.bind(aliExpress), productUrl)
-	// 	yield put(updateProgress(resultByScraping));
-	// }
-	// yield call(aliExpress.close.bind(aliExpress));
+	yield runScrapingAliExpress()
 
 
 	yield put(runScrapingFinished(true)); // Todo: 失敗時はエラーにする
@@ -63,6 +55,43 @@ function* handleRunScraping() {
 
 export default function* saga() {
   yield fork(handleRunScraping);
+}
+
+function* runScrapingAliExpress() {
+	const aliExpress = new AliExpressPageHandler()
+	yield call(aliExpress.launch.bind(aliExpress));
+
+	const listPageUrls = yield select(getListPageUrls)
+
+	// const listPageUrls = yield call(aliExpress.getListPageUrls.bind(aliExpress))
+	// yield put(setListPageUrls(listPageUrls))
+
+	yield put(resetListPageProgress())
+	for (let listPageUrl of listPageUrls) {
+		const detailPageUrls = yield call(aliExpress.getProductUrlList.bind(aliExpress), listPageUrl);
+		yield put(setDetailPageUrls(listPageUrl, detailPageUrls))
+
+		yield put(resetDetailPageProgress())
+		for (let productPageUrl of detailPageUrls) {
+			const resultByScraping = yield call(aliExpress.getProductInfo.bind(aliExpress), productPageUrl)
+			yield put(updateDetailPageProgress(resultByScraping));
+		}
+		yield put(updateListPageProgress())
+
+	}
+
+	// const detailPageUrls = yield call(aliExpress.getProductUrlList.bind(aliExpress), listPageUrls[0]);
+	// yield put(setDetailPageUrls(listPageUrls[0], detailPageUrls))
+	//
+	// yield put(resetDetailPageProgress())
+	// for (let i=1; i<=5; i++) {
+	// 	let resultByScraping = yield call(aliExpress.getProductInfo.bind(aliExpress), detailPageUrls[i])
+	// 	yield put(updateDetailPageProgress(resultByScraping));
+	// }
+	// yield put(updateListPageProgress())
+
+
+	yield call(aliExpress.close.bind(aliExpress));
 }
 
 function* runScrapingAmazonBooksBulk() {
