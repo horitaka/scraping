@@ -15,6 +15,8 @@ import { getListPageUrls } from './selectors'
 import AmazonPageHandler from '../../utils/AmazonPageHandler'
 import AliExpressPageHandler from '../../utils/AliExpressPageHandler'
 // import PatentScopePageHandler from '../../utils/PatentScopePageHandler'
+import RoomClipHandler from '../../utils/RoomClipHandler'
+
 
 function* runScraping(action) {
 	// Amazon書籍情報
@@ -27,8 +29,10 @@ function* runScraping(action) {
 	// yield call(amazon.close.bind(amazon));
 
 	// Amazon一覧ページからの書籍情報取得
-	yield runScrapingAmazonBooksBulk()
+	// yield runScrapingAmazonBooksBulk()
 
+	// Amazonのホビーの売れ筋一覧ページからの情報取得
+	yield runScrapingAmazonHobbysBulk()
 
 	// PatentScope
 	// const patent = new PatentScopePageHandler()
@@ -43,7 +47,7 @@ function* runScraping(action) {
 	// yield call(patent.close.bind(patent));
 
 	// AliExpress商品情報
-	yield runScrapingAliExpress()
+	// yield runScrapingAliExpress()
 
 
 	yield put(runScrapingFinished(true)); // Todo: 失敗時はエラーにする
@@ -92,6 +96,29 @@ function* runScrapingAliExpress() {
 
 
 	yield call(aliExpress.close.bind(aliExpress));
+}
+
+function* runScrapingAmazonHobbysBulk() {
+	const amazon = new AmazonPageHandler()
+	yield call(amazon.launch.bind(amazon))
+
+	const listPageUrls = yield select(getListPageUrls)
+
+	yield put(resetListPageProgress())
+	for (let listPageUrl of listPageUrls) {
+		const detailPageUrls = yield call(amazon.getProductPageUrlList2.bind(amazon), listPageUrl)
+		yield put(setDetailPageUrls(listPageUrl, detailPageUrls))
+
+		yield put(resetDetailPageProgress())
+		for (let productPageUrl of detailPageUrls) {
+			const resultByScraping = yield call(amazon.getHobbyInfo.bind(amazon), productPageUrl)
+			yield put(updateDetailPageProgress(resultByScraping));
+		}
+		yield put(updateListPageProgress())
+
+	}
+
+	yield call(amazon.close.bind(amazon));
 }
 
 function* runScrapingAmazonBooksBulk() {

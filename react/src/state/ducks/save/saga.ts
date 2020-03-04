@@ -3,18 +3,17 @@ import { takeEvery, fork, select } from 'redux-saga/effects'
 import { SAVE_TO_CSV_FILE_REQUEST } from './types'
 import { pageSelectors } from '../page'
 
-// import AmazonPageHandler from '../../utils/AmazonPageHandler';
-import AliExpressPageHandler from '../../utils/AliExpressPageHandler'
+import AmazonPageHandler from '../../utils/AmazonPageHandler';
+// import AliExpressPageHandler from '../../utils/AliExpressPageHandler'
 // import PatentScopePageHandler from '../../utils/PatentScopePageHandler'
 
 
 function* saveToCsvFile(action) {
 	const stringify = window.electron.remote.require('csv-stringify/lib/sync');
 
-	const columns = AliExpressPageHandler.getCsvHeader();
+	const columns = AmazonPageHandler.getCsvHeader2();
 	const scrapedData = yield select(pageSelectors.getDataByScraping)
-	const convertedScrapedData = AliExpressPageHandler.convertScrapedData(scrapedData)
-	const csvData = stringify(convertedScrapedData, {header: true, columns: columns})
+	const csvData = stringify(scrapedData, {header: true, columns: columns})
 
 	// const a = document.createElement('a');
 	// a.href = 'data:text/plain,' + encodeURIComponent(csvData);

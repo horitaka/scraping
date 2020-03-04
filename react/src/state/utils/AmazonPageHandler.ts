@@ -21,7 +21,6 @@ class AmazonPageHandler {
 
     const result = await this.puppeteer.movePageTo(productListPageUrl)
     const productCount = await this.puppeteer.getChildElementCount('#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row')
-    console.log(productCount)
 
     // for (let i=1; i <= productCount; i++) {
     for (let i=1; i < 10; i++) {
@@ -36,6 +35,69 @@ class AmazonPageHandler {
     }
 
     return productPageUrlList
+  }
+
+  // https://www.amazon.co.jp/gp/bestsellers/hobby/2189356051/ref=zg_bs_nav_hb_1_hb
+  // https://www.amazon.co.jp/b/?node=2189356051&ref_=Oct_CateC_2277721051_0&pf_rd_p=686636f6-ae01-516f-9e09-5b2b8728b02e&pf_rd_s=merchandised-search-4&pf_rd_t=101&pf_rd_i=2277721051&pf_rd_m=AN1VRQENFRJN5&pf_rd_r=KA3V16T2DRHKE3P4YYVW&pf_rd_r=KA3V16T2DRHKE3P4YYVW&pf_rd_p=686636f6-ae01-516f-9e09-5b2b8728b02e
+  async getProductPageUrlList2(productListPageUrl) {
+    // document.querySelector('#zg-ordered-list > li:nth-child(4) > span > div > span > a').href
+    // document.querySelector('#result_2 > div > div.a-row.a-spacing-base > div > div > a').href
+
+    let productPageUrlList = []
+
+    const result = await this.puppeteer.movePageTo(productListPageUrl)
+    const productCount = await this.puppeteer.getChildElementCount('#mainResults')
+
+    // for (let i=1; i <= productCount; i++) {
+    for (let i=0; i < 10; i++) {
+      let productPageUrl = ''
+      productPageUrl = await this.puppeteer.getAttr(`#result_${i} > div > div.a-row.a-spacing-base > div > div > a`, 'href')
+      if (productPageUrl) {
+        productPageUrlList.push(productPageUrl)
+      }
+    }
+
+    return productPageUrlList
+  }
+
+  // Amazonのホビーページ
+  async getHobbyInfo(url) {
+    if (!url) {
+      return {
+        data: {},
+        success: false,
+        statusCode: 'Unknown',
+        message: 'URLが入力されていません'
+      };
+    }
+
+    const result = await this.puppeteer.movePageTo(url)
+    if (!result.success) {
+      return {
+        ...result,
+        data: {
+          url: url
+        },
+      };
+    }
+
+    const category = await this.getCategory()
+    const title = await this.getTitle()
+    const author = await this.getAuthor()
+    const asin = await this.getAsin()
+
+    const data = {
+      url: url,
+      category: category,
+      title: title,
+      author: author,
+      asin: asin,
+    }
+    return {
+      success: true,
+      data: data,
+    }
+
   }
 
   // Amazonの書籍情報
@@ -102,10 +164,14 @@ class AmazonPageHandler {
   async getTitle() {
     // #ebooksProductTitle
     // #productTitle
+    // #title
     let title = ''
     title = await this.puppeteer.getText('#ebooksProductTitle')
     if (title === '') {
       title = await this.puppeteer.getText('#productTitle')
+    }
+    if (title === '') {
+      title = await this.puppeteer.getText('#title')
     }
     return title
   }
@@ -114,12 +180,32 @@ class AmazonPageHandler {
     // #bylineInfo > span > a
     // #bylineInfo > span:nth-child(1) > a
     // #bylineInfo > span > span.a-declarative > a.a-link-normal.contributorNameID
+    // #bylineInfo
+
     let author = ''
     author = await this.puppeteer.getText('#bylineInfo > span > a')
     if (author === '') {
       author = await this.puppeteer.getText('#bylineInfo > span > span.a-declarative > a.a-link-normal.contributorNameID')
     }
+    if (author === '') {
+      author = await this.puppeteer.getText('#bylineInfo')
+    }
     return author
+  }
+
+  async getAsin() {
+    // #detail_bullets_id > table > tbody > tr > td > div > ul
+    // #detail_bullets_id > table > tbody > tr > td > div > ul > li:nth-child(4)
+    const productDetailsCounts = await this.puppeteer.getChildElementCount('#detail_bullets_id > table > tbody > tr > td > div > ul')
+    let asin = ''
+    for (let i=1; i<=productDetailsCounts; i++) {
+      const productDetailsText = await this.puppeteer.getText(`#detail_bullets_id > table > tbody > tr > td > div > ul > li:nth-child(${i})`)
+      if (productDetailsText.indexOf('ASIN') != -1) {
+        asin = productDetailsText.replace(/ASIN:/g, '').trim()
+        return asin
+      }
+    }
+    return ''
   }
 
   async getCategory() {
@@ -188,6 +274,16 @@ class AmazonPageHandler {
   		page: 'ページ数',
   		imgLink: '商品画像',
   	}
+  }
+
+  static getCsvHeader2() {
+    return {
+      url: 'URL',
+      category: 'カテゴリ',
+      title: '商品名',
+      author: 'メーカー名',
+      asin: 'ASIN',
+    }
   }
 
   extractNumber(text) {

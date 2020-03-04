@@ -65,6 +65,14 @@ class PuppeteerHandler {
     }
   }
 
+  async reload() {
+    try {
+      await this.page.reload()
+    } catch(e) {
+      console.warn(e)
+    }
+  }
+
   async movePageTo(url) {
     try {
       const response = await this.page.goto(url);
@@ -103,11 +111,11 @@ class PuppeteerHandler {
 
   // Todo
   async login() {
-    await this.page.type('#fm-login-id', 'horita629@gmail.com');
-    await this.page.type('#fm-login-password', 'noritake');
-    this.page.click('#login-form > div.fm-btn > button');
-    await this.page.waitForNavigation({timeout: 60000, waitUntil: 'domcontentloaded'});
-
+    await this.page.type('#Auth-email', 'horita629@gmail.com');
+    await this.page.type('#Auth-pass', 'noritake');
+    await this.page.click('#Auth-email-login');
+    // await this.page.waitForNavigation({timeout: 60000, waitUntil: 'load'});
+    await this.sleep(5000)
   }
 
   async scrollByWindowHeight() {
