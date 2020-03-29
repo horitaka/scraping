@@ -31,7 +31,8 @@ const useStyles = makeStyles(theme => ({
 export default function UrlInput(props) {
   const { listPageUrls, setListPageUrls } = props
   const classes = useStyles();
-  const labels = ['URL1を入力', 'URL2を入力', 'URL3を入力']
+  // const labels = ['URL1を入力', 'URL2を入力', 'URL3を入力']
+  const labels = ['URLを入力']
 
   const handleUrlChange = (event, index) => {
     const newListPageUrls = listPageUrls.slice()
