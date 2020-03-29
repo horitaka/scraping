@@ -20,7 +20,6 @@ class PuppeteerHandler {
     this.page = null;
   }
 
-
   async launch(domain) {
     const executablePath = await this.puppeteer.executablePath()
     const executablePathUnpacked = executablePath.replace('app.asar', 'app.asar.unpacked')
@@ -94,7 +93,6 @@ class PuppeteerHandler {
   async waitUntilPageLoaded(url) {
     await new Promise((resolve) => {
       this.page.on('load', () => {
-        console.log('load');
         const currentUrl = this.page.url()
         console.log(currentUrl)
         if(currentUrl.startsWith(url)) {
@@ -142,7 +140,6 @@ class PuppeteerHandler {
       documentHeight = result.documentHeight
       windowHeight = result.windowHeight
       positionY = result.positionY
-      console.log(result)
     }
     // const pageCount = Math.ceil(documentHeight / windowHeight);
     //
@@ -159,30 +156,6 @@ class PuppeteerHandler {
       }, msec)
     })
   }
-  // Todo
-  // async getNodeList(selector) {
-  //   // const selector2 = '#root'
-  //   try {
-  //     const rowCount = await this.getChildElementCount('#root > div > div > div.main-content > div.right-menu > div > div.gallery-wrap.product-list > ul')
-  //     console.log(rowCount)
-  //
-  //     let productUrlList = []
-  //     for (let i=1; i<=1; i++) {
-  //       const columnCount = await this.getChildElementCount(`#root > div > div > div.main-content > div.right-menu > div > div.gallery-wrap.product-list > ul > div:nth-child(${i})`)
-  //       console.log(columnCount)
-  //       for (let j=1; j<=columnCount; j++) {
-  //         const url = await this.getAttr(`#root > div > div > div.main-content > div.right-menu > div > div.gallery-wrap.product-list > ul > div:nth-child(${i}) > li:nth-child(${j}) > div > div.product-img > div > a`, 'href')
-  //         console.log(url)
-  //         productUrlList.push(url)
-  //       }
-  //     }
-  //
-  //     return productUrlList
-  //   } catch (e) {
-  //     console.warn(e)
-  //     return ''
-  //   }
-  // }
 
   async click(selector) {
     try {
@@ -190,21 +163,6 @@ class PuppeteerHandler {
     } catch (e) {
       console.warn(e)
     }
-  }
-
-  async test() {
-    const selector1 = '#root > div > div.product-main > div > div.product-info > div.product-sku > div > div > ul > li'
-    const node1 = await this.page.evaluate(`(() => (document.querySelectorAll('${selector1}')))()`);
-    console.log(node1)
-
-    const selector2 = '#root > div > div.product-main > div > div.product-info > div.product-sku > div > div > ul'
-    const node2 = await this.page.evaluate(`(() => (document.querySelector('${selector2}')))()`);
-    console.log(node2)
-
-    const selector3 = '#root > div > div.product-main > div > div.product-info > div.product-sku > div > div > ul'
-    const count = await this.getChildElementCount(selector3)
-    console.log(count)
-
   }
 
   async getChildElementCount(selector) {
@@ -288,6 +246,28 @@ class PuppeteerHandler {
       console.warn(e)
       return ''
     }
+  }
+
+  async getAttrList(selector, attr) {
+    const attrList = await this.page.evaluate(
+      `(() => {
+        var list = []
+        document.querySelectorAll('${selector}').forEach(item => list.push(item.${attr}))
+        return list
+      })()`
+    );
+    return attrList
+  }
+
+  async getLinkAndTextList(selector) {
+    const attrList = await this.page.evaluate(
+      `(() => {
+        var list = []
+        document.querySelectorAll('${selector}').forEach(item => list.push({ url: item.href, text: item.textContent }))
+        return list
+      })()`
+    );
+    return attrList
   }
 
 }

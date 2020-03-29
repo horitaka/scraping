@@ -1,20 +1,17 @@
 import React from 'react';
 import styled from 'styled-components'
 
-import Scraper from './Scraper'
+import TwoPaneLayout from './TwoPaneLayouts'
+import Settings from './settings/Settings'
+import ScrapingMain from './scraping/ScrapingMain'
 
 const App = () => {
   return (
-    <AppContainer>
-      <Scraper />
-    </AppContainer>
+    <TwoPaneLayout
+      leftComponent={<Settings />}
+      rightComponent={<ScrapingMain />}
+    />
   );
 }
-
-const AppContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-`
 
 export default App;

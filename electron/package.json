@@ -9,7 +9,7 @@
   "scripts": {
     "electron": "electron .",
     "package": "electron-packager . app --platform=darwin --arch=x64 --prune --out=release --overwrite --icon=icon.icns --asar.unpackDir=node_modules/puppeteer/.local-chromium",
-    "package-win": "electron-packager . app --platform=win32 --arch=x64 --prune --out=release --overwrite",
+    "package-win": "electron-packager . app --platform=win32 --arch=x64 --prune --out=release --overwrite --icon=icon.ico --asar.unpackDir=node_modules/puppeteer/.local-chromium",
     "package-all": "electron-packager . app --platform=all --arch=x64 --prune --out=release --overwrite"
   },
   "main": "main.js",

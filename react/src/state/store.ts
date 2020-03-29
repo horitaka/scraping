@@ -6,7 +6,7 @@ import {
   pageReducer,
   saveReducer,
   rootSaga
-} from "./ducks";
+} from "./modules";
 // import rootSaga from './saga'
 
 export default function configuStore() {

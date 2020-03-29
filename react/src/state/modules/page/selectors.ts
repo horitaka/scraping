@@ -1,8 +1,11 @@
 import { createSelector } from 'reselect'
 
+import AmazonPageHandler from '../../utils/AmazonPageHandler'
 
 export const getResultListByScraping = state => state.page.resultListByScraping
 export const getListPageUrls = state => state.page.listPageUrls
+export const getDetailPageUrls = state => state.page.detailPageUrls
+export const getPageType = state => state.page.pageType
 
 export const getDataByScraping = createSelector(
   [getResultListByScraping],
@@ -11,6 +14,16 @@ export const getDataByScraping = createSelector(
     return dataByScraping
   }
 )
+
+export const getTableHeader = createSelector(
+  [getPageType],
+  pageType => {
+    if (pageType === 'amazonbooks') {
+      return AmazonPageHandler.getTableHeader()
+    }
+  }
+)
+
 
 // export const getResultMessage = createSelector(
 //   [getScrapedData],

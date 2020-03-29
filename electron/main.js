@@ -30,7 +30,7 @@ function createWindow () {
   } else {
     indexHtmlPath = 'http://localhost:3000'
 
-    const ELECTRON_DEV_TOOLS_PATH = '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.4.0_0'
+    const ELECTRON_DEV_TOOLS_PATH = '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.5.0_0'
     console.log(process.env.REACT_APP_ELECTRON_DEV_TOOLS_PATH)
     BrowserWindow.addDevToolsExtension(
       // path.join(os.homedir(), process.env.ELECTRON_DEV_TOOLS_PATH)

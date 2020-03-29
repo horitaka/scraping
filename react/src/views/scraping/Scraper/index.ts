@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 
-import { pageOperations } from '../../state/ducks/page'
-// import { pageSelectors } from '../../state/ducks/page'
-import { saveOperations } from '../../state/ducks/save'
+import { pageOperations } from '../../../state/modules/page'
+// import { pageSelectors } from '../../state/modules/page'
+import { saveOperations } from '../../../state/modules/save'
 import Scraper from './Scraper'
 
 const mapStateToProps = (state, ownProps) => {
@@ -15,6 +15,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    setDetailPageUrls: (urls) => dispatch(pageOperations.setDetailPageUrls('test', urls)), // Todo 1つ目の引数直す
     setListPageUrls: (urls) => dispatch(pageOperations.setListPageUrls(urls)),
     onRunScrapingClick: () => dispatch(pageOperations.runScraping()),
     onSaveButtonClick: () => dispatch(saveOperations.saveToCsvFileRequest())

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
 
-// import * as testurl from '../../test/testurl'
-
 const Scraper = (props) => {
-  const { isFetching, resultListByScraping, progress, setListPageUrls, onRunScrapingClick, onSaveButtonClick } = props;
+  const { isFetching, resultListByScraping, progress, setListPageUrls, setDetailPageUrls, onRunScrapingClick, onSaveButtonClick } = props;
 
-  const [urlList, setUrl] = useState(new Array(5).fill(''))
+  const [urlList, setUrl] = useState(new Array(1).fill(''))
   // const [urlList, setUrl] = useState(testurl.testUrl1)
   // const [isError, setIsError] = useState(new Array(10).fill(false))
 
@@ -14,16 +12,13 @@ const Scraper = (props) => {
     event.preventDefault();
     const validUrls = urlList.filter(url => url !== '')
     setListPageUrls(validUrls)
+    // setDetailPageUrls(validUrls)
     onRunScrapingClick()
   }
 
   const handleChange = (event, index) => {
     const url = event.target.value.trim();
-    const isValid = validateUrl(url);
-
-    // let tmpIsError = [...isError]
-    // tmpIsError[index] = !isValid
-    // setIsError(tmpIsError)
+    // const isValid = validateUrl(url);
 
     let tmpUrlList = [...urlList]
     tmpUrlList[index] = url
@@ -33,29 +28,6 @@ const Scraper = (props) => {
   const handleSaveButtonClick = () => {
     onSaveButtonClick()
   }
-
-  // Amazon専用
-  const validateUrl = (url) => {
-    const regExp = /^https:\/\/www.amazon.co.jp.*/;
-    const isValid = regExp.test(url)
-    return isValid;
-  }
-
-  // const scrapedList = (
-  //   <List>
-  //     {
-  //       data.map(item => (
-  //         <ListItem key={item.title}>
-  //           <MessageListItemTitle>{item.title}</MessageListItemTitle>
-  //           <br></br>
-  //           <MessageListItemContents>{item.author}</MessageListItemContents>
-  //           <br></br>
-  //           <MessageListItemContents>{item.description}</MessageListItemContents>
-  //         </ListItem>
-  //       ))
-  //     }
-  //   </List>
-  // )
 
   const resultMessage = (
     <MessageList>
@@ -74,22 +46,6 @@ const Scraper = (props) => {
     </MessageList>
   )
 
-  // const resultMessageRenderer = (
-  //   <List>
-  //   {
-  //     resultMessage.map((message, index) => (
-  //       <MessageListItemContents key={index}>{message}<br/></MessageListItemContents>
-  //     ))
-  //   }
-  //   </List>
-  // )
-
-  // const loadingMessage = <div>データ取得中...</div>
-  // const progressMessage = progress.listPageFinished === 0
-  //   ? ''
-  //   : isFetching
-  //     ? <div>{`データ取得中-${progress.listPageFinished+1}ページ-${progress.detailPageFinished}`}</div>
-  //     : <div>データ取得完了</div>
   const progressMessage = !isFetching
     ? progress.listPageFinished === 0
       ? ''

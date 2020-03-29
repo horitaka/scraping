@@ -12,30 +12,38 @@ class AmazonPageHandler {
     await this.puppeteer.launch()
   }
 
-  async getProductPageUrlList(productListPageUrl) {
-    // #search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a
+  async getDetailPageUrlList(productListPageUrl) {
+    await this.puppeteer.movePageTo(productListPageUrl)
 
-    // #search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a
-
-    let productPageUrlList = []
-
-    const result = await this.puppeteer.movePageTo(productListPageUrl)
-    const productCount = await this.puppeteer.getChildElementCount('#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row')
-
-    // for (let i=1; i <= productCount; i++) {
-    for (let i=1; i < 10; i++) {
-      let productPageUrl = ''
-      productPageUrl = await this.puppeteer.getAttr(`#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a`, 'href')
-      console.log(productPageUrl)
-      if (productPageUrl === '') {
-        productPageUrl = await this.puppeteer.getAttr(`#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a`, 'href')
-      }
-      console.log(productPageUrl)
-      productPageUrlList.push(productPageUrl)
-    }
-
-    return productPageUrlList
+    const selector = '#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(5) > div:nth-child(1)  h2 > a'
+    const detailPageUrlList = await this.puppeteer.getAttrList(selector, 'href')
+    return detailPageUrlList
   }
+
+  // async getProductPageUrlList(productListPageUrl) {
+  //   // #search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a
+  //
+  //   // #search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a
+  //
+  //   let productPageUrlList = []
+  //
+  //   const result = await this.puppeteer.movePageTo(productListPageUrl)
+  //   const productCount = await this.puppeteer.getChildElementCount('#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row')
+  //
+  //   // for (let i=1; i <= productCount; i++) {
+  //   for (let i=1; i < 10; i++) {
+  //     let productPageUrl = ''
+  //     productPageUrl = await this.puppeteer.getAttr(`#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a`, 'href')
+  //     console.log(productPageUrl)
+  //     if (productPageUrl === '') {
+  //       productPageUrl = await this.puppeteer.getAttr(`#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(6) > div.s-result-list.s-search-results.sg-row > div:nth-child(${i}) > div > span > div > div > div:nth-child(2) > div.sg-col-4-of-12.sg-col-8-of-16.sg-col-16-of-24.sg-col-12-of-20.sg-col-24-of-32.sg-col.sg-col-28-of-36.sg-col-20-of-28 > div > div:nth-child(1) > div > div > div:nth-child(1) > h2 > a`, 'href')
+  //     }
+  //     console.log(productPageUrl)
+  //     productPageUrlList.push(productPageUrl)
+  //   }
+  //
+  //   return productPageUrlList
+  // }
 
   // https://www.amazon.co.jp/gp/bestsellers/hobby/2189356051/ref=zg_bs_nav_hb_1_hb
   // https://www.amazon.co.jp/b/?node=2189356051&ref_=Oct_CateC_2277721051_0&pf_rd_p=686636f6-ae01-516f-9e09-5b2b8728b02e&pf_rd_s=merchandised-search-4&pf_rd_t=101&pf_rd_i=2277721051&pf_rd_m=AN1VRQENFRJN5&pf_rd_r=KA3V16T2DRHKE3P4YYVW&pf_rd_r=KA3V16T2DRHKE3P4YYVW&pf_rd_p=686636f6-ae01-516f-9e09-5b2b8728b02e
@@ -58,6 +66,13 @@ class AmazonPageHandler {
     }
 
     return productPageUrlList
+  }
+
+  async getShopListPageUrl(detailPageUrl) {
+    await this.puppeteer.movePageTo(detailPageUrl)
+    let shopListPageUrl = '';
+    shopListPageUrl = await this.puppeteer.getAttr('#olp-new > span > a', 'href')
+    return shopListPageUrl
   }
 
   // Amazonのホビーページ
@@ -85,6 +100,10 @@ class AmazonPageHandler {
     const title = await this.getTitle()
     const author = await this.getAuthor()
     const asin = await this.getAsin()
+
+    await this.puppeteer.movePageTo('https://www.amazon.co.jp/gp/offer-listing/B0835963K4/ref=dp_olp_new?ie=UTF8&condition=new')
+    await this.puppeteer.sleep(1000)
+    await this.puppeteer.scrollToBottom()
 
     const data = {
       url: url,
@@ -264,7 +283,7 @@ class AmazonPageHandler {
     return pageNum
   }
 
-  static getCsvHeader() {
+  static getTableHeader() {
     return {
   		url: 'URL',
   		title: 'タイトル',
