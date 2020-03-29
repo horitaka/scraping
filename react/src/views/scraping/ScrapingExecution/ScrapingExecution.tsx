@@ -1,13 +1,22 @@
 import React from 'react';
 
+// import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import BaseLayout from '../BaseLayout'
 
+// const useStyles = makeStyles(theme => ({
+//   root: {
+//     width: '90%',
+//     margin: 'auto'
+//   },
+// }));
+
 export default function ScrapingExecution(props) {
   const { runScraping } = props
+  // const classes = useStyles();
 
   const handleStartButtonClick = () => {
     runScraping()

@@ -11,11 +11,15 @@ export default function ScrapingMain() {
     <Grid
       container
       justify="center"
+      alignItems="flex-start"
     >
       <Grid
         container
         item
         xs={10}
+        direction="row"
+        justify="center"
+        alignItems="flex-start"
       >
         <UrlInput />
         <ScrapingExecution />

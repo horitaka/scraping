@@ -1,11 +1,47 @@
-import React, { useState } from 'react';
-import styled from 'styled-components'
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import DataUsageIcon from '@material-ui/icons/DataUsage';
+import SettingsIcon from '@material-ui/icons/Settings';
 
-// import * as testurl from '../../test/testurl'
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: theme.palette.secondary.light,
+  },
+}));
 
-export default function Settings() {
+function ListItemLink(props) {
+  return <ListItem button component="a" {...props} />;
+}
+
+export default function SimpleList() {
+  const classes = useStyles();
 
   return (
-    <div>Settings</div>
-  )
+    <Grid className={classes.root}>
+      <List component="nav" aria-label="main mailbox folders">
+        <ListItem button>
+          <ListItemIcon>
+            <DataUsageIcon />
+          </ListItemIcon>
+          <ListItemText primary="スクレイピング"/>
+        </ListItem>
+        <Divider />
+        <ListItem button>
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary="設定" />
+        </ListItem>
+      </List>
+
+    </Grid>
+  );
 }

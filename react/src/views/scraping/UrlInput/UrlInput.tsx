@@ -19,6 +19,9 @@ const useStyles = makeStyles(theme => ({
     // minWidth: 120,
   },
   textField: {
+    width: '90%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     marginBottom: theme.spacing(2),
     // minWidth: 120,
   },
