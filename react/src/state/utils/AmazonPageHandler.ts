@@ -14,6 +14,7 @@ class AmazonPageHandler {
 
   async getDetailPageUrlList(productListPageUrl) {
     await this.puppeteer.movePageTo(productListPageUrl)
+    // await this.puppeteer.scrollToBottom()
 
     const selector = '#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(5) > div:nth-child(1)  h2 > a'
     const detailPageUrlList = await this.puppeteer.getAttrList(selector, 'href')

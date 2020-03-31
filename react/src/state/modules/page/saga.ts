@@ -10,7 +10,7 @@ import {
 	resetDetailPageProgress,
 	updateDetailPageProgress,
 } from './operations'
-import { getListPageUrls, getDetailPageUrls } from './selectors'
+import { getPageType, getListPageUrls, getDetailPageUrls } from './selectors'
 
 import AmazonPageHandler from '../../utils/AmazonPageHandler'
 import AliExpressPageHandler from '../../utils/AliExpressPageHandler'
@@ -23,23 +23,36 @@ export default function* saga() {
 }
 
 function* runScraping(action) {
-	// Amazon書籍情報
-	// const amazon = new AmazonPageHandler()
-	// yield call(amazon.launch.bind(amazon));
-	// for (let url of urlList) {
-	// 	const resultByScraping = yield call(amazon.getBookInfo.bind(amazon), url)
-	// 	yield put(updateProgress(resultByScraping));
-	// }
-	// yield call(amazon.close.bind(amazon));
+	yield runScrapingMain()
 
-	// Amazon一覧ページからの書籍情報取得
-	yield runScrapingAmazonBooksBulk()
-
-	// Amazonのホビーの売れ筋一覧ページからの情報取得
-	// yield runScrapingAmazonHobbysBulk()
 
 	yield put(runScrapingFinished(true)); // Todo: 失敗時はエラーにする
 }
+
+function* runScrapingMain() {
+	const pageType = yield select(getPageType)
+
+	switch(pageType) {
+		case 'amazonbooks':
+			// Amazon一覧ページからの書籍情報取得
+			yield runScrapingAmazonBooksBulk()
+			break;
+
+		case 'amazonhobbies':
+			// Amazonのホビーの売れ筋一覧ページからの情報取得
+			// yield runScrapingAmazonHobbysBulk()
+			//  break;
+			
+		default:
+			break;
+
+	}
+
+
+}
+
+
+// ----- 各サービスのスクレイピング -----
 
 // ex https://www.amazon.co.jp/s?k=%E6%9D%B1%E9%87%8E%E5%9C%AD%E5%90%BE&i=stripbooks&__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&ref=nb_sb_noss
 function* runScrapingAmazonBooksBulk() {

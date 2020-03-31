@@ -14,7 +14,8 @@ export default function* rootSaga() {
 function* saveToCsvFile(action) {
 	// CSV形式にデータを変換
 	const stringify = window.electron.remote.require('csv-stringify/lib/sync');
-	const columns = AmazonPageHandler.getTableHeader();
+	const pageType = yield select(pageSelectors.getPageType)
+	const columns = getTableHeader(pageType)
 	const scrapedData = yield select(pageSelectors.getDataByScraping)
 	const csvData = stringify(scrapedData, {header: true, columns: columns})
 
@@ -28,5 +29,17 @@ function* saveToCsvFile(action) {
 	document.body.appendChild(link);
 	link.click();
 	document.body.removeChild(link);
+
+}
+
+
+function getTableHeader(pageType) {
+	switch (pageType) {
+		case 'amazonbooks':
+			return AmazonPageHandler.getTableHeader();
+
+		default:
+			break;
+	}
 
 }
