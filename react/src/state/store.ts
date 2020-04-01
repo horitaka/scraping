@@ -3,6 +3,7 @@ import createSagaMiddleware from 'redux-saga'
 import { createLogger } from 'redux-logger';
 
 import {
+  appReducer,
   pageReducer,
   saveReducer,
   rootSaga
@@ -11,6 +12,7 @@ import {
 
 export default function configuStore() {
   const rootReducers = combineReducers({
+    app: appReducer,
     page: pageReducer,
     save: saveReducer
   });

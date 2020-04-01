@@ -37,7 +37,6 @@ page: {
 */
 
 const initialState = {
-  pageType: 'amazonbooks',
   listPageUrls: [],
   detailPageUrls: {},
   isFetching : false,

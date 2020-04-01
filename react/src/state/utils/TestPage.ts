@@ -1,8 +1,7 @@
 import PuppeteerHandler from './PuppeteerHandler';
 import * as HtmlHandleUtility from './HtmlHandleUtility'
-import PageHandler from './PageHandler'
 
-class AmazonPageHandler {
+class TestPage {
   private puppeteer;
 
   constructor () {
@@ -13,148 +12,32 @@ class AmazonPageHandler {
     await this.puppeteer.launch()
   }
 
-  async getDetailPageUrlList(productListPageUrl) {
-    await this.puppeteer.movePageTo(productListPageUrl)
-    // await this.puppeteer.scrollToBottom()
+  async login(loginUrl, userName, password) {
+    const userNameSelector = '#login_user_name'
+    const passwordSelector = '#login_password'
+    const loginButtonSelecotr = '#wrapper > div > div > div > div.col-lg-6.col-md-6.col-sm-7 > form > div:nth-child(5) > div > button'
 
-    const selector = '#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(5) > div:nth-child(1)  h2 > a'
-    const detailPageUrlList = await this.puppeteer.getAttrList(selector, 'href')
-    return detailPageUrlList
+    await this.puppeteer.login(loginUrl, userName, password, userNameSelector, passwordSelector, loginButtonSelecotr)
   }
 
-  // https://www.amazon.co.jp/gp/bestsellers/hobby/2189356051/ref=zg_bs_nav_hb_1_hb
-  // https://www.amazon.co.jp/b/?node=2189356051&ref_=Oct_CateC_2277721051_0&pf_rd_p=686636f6-ae01-516f-9e09-5b2b8728b02e&pf_rd_s=merchandised-search-4&pf_rd_t=101&pf_rd_i=2277721051&pf_rd_m=AN1VRQENFRJN5&pf_rd_r=KA3V16T2DRHKE3P4YYVW&pf_rd_r=KA3V16T2DRHKE3P4YYVW&pf_rd_p=686636f6-ae01-516f-9e09-5b2b8728b02e
-  async getProductPageUrlList2(productListPageUrl) {
-    // document.querySelector('#zg-ordered-list > li:nth-child(4) > span > div > span > a').href
-    // document.querySelector('#result_2 > div > div.a-row.a-spacing-base > div > div > a').href
-
-    let productPageUrlList = []
-
-    const result = await this.puppeteer.movePageTo(productListPageUrl)
-    const productCount = await this.puppeteer.getChildElementCount('#mainResults')
-
-    // for (let i=1; i <= productCount; i++) {
-    for (let i=0; i < 10; i++) {
-      let productPageUrl = ''
-      productPageUrl = await this.puppeteer.getAttr(`#result_${i} > div > div.a-row.a-spacing-base > div > div > a`, 'href')
-      if (productPageUrl) {
-        productPageUrlList.push(productPageUrl)
-      }
-    }
-
-    return productPageUrlList
+  async search(serchKeyword) {
+    const searchKeywordSelector = '#navbar-collapsee > form > div.search-field > input'
+    const searchButtonSelector = '#navbar-collapsee > form > button'
+    await this.puppeteer.search(serchKeyword, searchKeywordSelector, searchButtonSelector)
   }
 
-  async getShopListPageUrl(detailPageUrl) {
-    await this.puppeteer.movePageTo(detailPageUrl)
-    let shopListPageUrl = '';
-    shopListPageUrl = await this.puppeteer.getAttr('#olp-new > span > a', 'href')
-    return shopListPageUrl
-  }
-
-  // Amazonのホビーページ
-  async getHobbyInfo(url) {
-    if (!url) {
-      return {
-        data: {},
-        success: false,
-        statusCode: 'Unknown',
-        message: 'URLが入力されていません'
-      };
-    }
-
-    const result = await this.puppeteer.movePageTo(url)
-    if (!result.success) {
-      return {
-        ...result,
-        data: {
-          url: url
-        },
-      };
-    }
-
-    const category = await this.getCategory()
-    const title = await this.getTitle()
-    const author = await this.getAuthor()
-    const asin = await this.getAsin()
-
-    await this.puppeteer.movePageTo('https://www.amazon.co.jp/gp/offer-listing/B0835963K4/ref=dp_olp_new?ie=UTF8&condition=new')
+  // スクレイピング
+  async getInfo() {
+    await this.puppeteer.scrollByWindowHeight()
     await this.puppeteer.sleep(1000)
-    await this.puppeteer.scrollToBottom()
-
-    const data = {
-      url: url,
-      category: category,
-      title: title,
-      author: author,
-      asin: asin,
-    }
-    return {
-      success: true,
-      data: data,
-    }
-
-  }
-
-  // Amazonの書籍情報
-  async getBookInfo(url) {
-    if (!url) {
-      return {
-        data: {},
-        success: false,
-        statusCode: 'Unknown',
-        message: 'URLが入力されていません'
-      };
-    }
-
-    const result = await this.puppeteer.movePageTo(url)
-    if (!result.success) {
-      return {
-        ...result,
-        data: {
-          url: url
-        },
-      };
-    }
-
-    const title = await this.getTitle()
-    // console.log(title)
-
-    let author = await this.getAuthor()
-    // console.log(author)
-
-    const description = await this.getDescription();
-    // console.log(description)
-
-    const category = await this.getCategory()
-    // console.log(category)
-
-    const pageNum = await this.getPageNum()
-    // console.log(pageNum)
-
-    const imgLink = await this.getImgLink()
-    // console.log(imgLink)
-
-    const data = {
-      url: url,
-      title: title,
-      author: author,
-      description: description,
-      category: category,
-      page: pageNum,
-      imgLink: imgLink,
-    }
-    console.log(data)
-    return {
-      success: true,
-      data: data,
-    }
-
+    await this.puppeteer.scrollByWindowHeight()
+    await this.puppeteer.sleep(1000)
+    await this.puppeteer.scrollByWindowHeight()
+    await this.puppeteer.sleep(1000)
   }
 
   async close() {
     await this.puppeteer.close()
-    // super.close()
   }
 
 
@@ -261,16 +144,23 @@ class AmazonPageHandler {
     return pageNum
   }
 
-  getTableHeader() {
+  static getTableHeader() {
     return {
-  		url: 'URL',
   		title: 'タイトル',
-  		author: '著者',
   		description: '説明文',
-  		category: 'カテゴリ',
-  		page: 'ページ数',
-  		imgLink: '商品画像',
+  		date: '日付',
+  		imgLink: '画像',
   	}
+  }
+
+  static getCsvHeader2() {
+    return {
+      url: 'URL',
+      category: 'カテゴリ',
+      title: '商品名',
+      author: 'メーカー名',
+      asin: 'ASIN',
+    }
   }
 
   extractNumber(text) {
@@ -284,4 +174,4 @@ class AmazonPageHandler {
 
 }
 
-export default AmazonPageHandler
+export default TestPage

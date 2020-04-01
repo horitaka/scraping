@@ -107,13 +107,18 @@ class PuppeteerHandler {
     return this.page.url()
   }
 
-  // Todo
-  async login() {
-    await this.page.type('#Auth-email', 'horita629@gmail.com');
-    await this.page.type('#Auth-pass', 'noritake');
-    await this.page.click('#Auth-email-login');
+  async login(loginUrl, userName, password, userNameSelector, passwordSelector, loginButtonSelecotr) {
+    await this.movePageTo(loginUrl)
+    await this.page.type(userNameSelector, userName);
+    await this.page.type(passwordSelector, password);
+    await this.page.click(loginButtonSelecotr);
     // await this.page.waitForNavigation({timeout: 60000, waitUntil: 'load'});
-    await this.sleep(5000)
+    // await this.sleep(5000)
+  }
+
+  async search(searchKeyword, searchKeywordSelector, searchButtonSelector) {
+    await this.page.type(searchKeywordSelector, searchKeyword);
+    await this.page.click(searchButtonSelector);
   }
 
   async scrollByWindowHeight() {

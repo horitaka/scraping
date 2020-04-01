@@ -1,5 +1,6 @@
 import { fork } from 'redux-saga/effects'
 
+import appReducer from './app'
 import pageReducer, { pageSaga } from './page'
 import saveReducer, { saveSaga } from './save'
 
@@ -9,6 +10,7 @@ function* rootSaga() {
 }
 
 export {
+  appReducer,
   pageReducer,
   saveReducer,
   rootSaga,

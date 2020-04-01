@@ -1,11 +1,12 @@
 import { createSelector } from 'reselect'
 
 import AmazonPageHandler from '../../utils/AmazonPageHandler'
+import TestPage from '../../utils/TestPage'
+import { appSelectors } from '../app'
 
 export const getResultListByScraping = state => state.page.resultListByScraping
 export const getListPageUrls = state => state.page.listPageUrls
 export const getDetailPageUrls = state => state.page.detailPageUrls
-export const getPageType = state => state.page.pageType
 
 export const getDataByScraping = createSelector(
   [getResultListByScraping],
@@ -16,22 +17,8 @@ export const getDataByScraping = createSelector(
 )
 
 export const getTableHeader = createSelector(
-  [getPageType],
-  pageType => {
-    if (pageType === 'amazonbooks') {
-      return AmazonPageHandler.getTableHeader()
-    }
+  [appSelectors.getPageHandler],
+  pageHandler => {
+    return pageHandler.getTableHeader()
   }
 )
-
-
-// export const getResultMessage = createSelector(
-//   [getScrapedData],
-//   (scrapedData) => {
-//     const resultMessage = scrapedData.map(data => {
-//       return data.url + '\n' + data.title + '\n' + data.author
-//     })
-//
-//     return resultMessage;
-//   }
-// )
