@@ -4,8 +4,7 @@ const path = require('path')
 const url = require('url');
 const os = require('os');
 
-function createWindow () {
-  // Create the browser window.
+function createWindow () {  // Create the browser window.
   const { width, height } = screen.getPrimaryDisplay().workAreaSize
   const mainWindow = new BrowserWindow({
     x: 0,
@@ -29,11 +28,8 @@ function createWindow () {
     });
   } else {
     indexHtmlPath = 'http://localhost:3000'
-
-    const ELECTRON_DEV_TOOLS_PATH = '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.5.0_0'
-    console.log(process.env.REACT_APP_ELECTRON_DEV_TOOLS_PATH)
+    const ELECTRON_DEV_TOOLS_PATH = '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.6.0_0'
     BrowserWindow.addDevToolsExtension(
-      // path.join(os.homedir(), process.env.ELECTRON_DEV_TOOLS_PATH)
       path.join(os.homedir(), ELECTRON_DEV_TOOLS_PATH)
     );
     mainWindow.webContents.openDevTools();

@@ -30,15 +30,16 @@ function* runScraping(action) {
 
 function* runScrapingMain() {
 	const pageHandler = yield select(appSelectors.getPageHandler)
-	console.log(pageHandler)
 
 	// 初期化
 	// const amazon = new AmazonPageHandler()
 	yield call(pageHandler.launch.bind(pageHandler))
 
-	// ログイン Todo
+	// ログイン
+	yield call(pageHandler.login.bind(pageHandler))
 
-	// 検索 Todo
+	// 検索
+	yield call(pageHandler.search.bind(pageHandler))
 
 	// 一覧ページのURLのリストを取得
 	const listPageUrls = yield select(getListPageUrls)

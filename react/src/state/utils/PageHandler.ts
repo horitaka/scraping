@@ -15,6 +15,14 @@ class PageHandler {
     await this.puppeteer.close()
   }
 
+  async login(loginUrl='', userId='', password='') {
+
+  }
+
+  async search(searchKeyword='', searchKeywordSelector='') {
+
+  }
+
   getTableHeader() {
     return {}
   }

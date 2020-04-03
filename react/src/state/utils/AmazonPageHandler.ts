@@ -2,15 +2,17 @@ import PuppeteerHandler from './PuppeteerHandler';
 import * as HtmlHandleUtility from './HtmlHandleUtility'
 import PageHandler from './PageHandler'
 
-class AmazonPageHandler {
-  private puppeteer;
+class AmazonPageHandler extends PageHandler{
+  // protected puppeteer;
 
   constructor () {
-    this.puppeteer = new PuppeteerHandler();
+    super()
+    // this.puppeteer = new PuppeteerHandler();
   }
 
   async launch() {
-    await this.puppeteer.launch()
+    await super.launch()
+    // await this.puppeteer.launch()
   }
 
   async getDetailPageUrlList(productListPageUrl) {
@@ -153,8 +155,8 @@ class AmazonPageHandler {
   }
 
   async close() {
-    await this.puppeteer.close()
-    // super.close()
+    await super.close()
+    // await this.puppeteer.close()
   }
 
 
