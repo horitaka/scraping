@@ -1,7 +1,5 @@
 import { createSelector } from 'reselect'
 
-import AmazonPageHandler from '../../utils/AmazonPageHandler'
-import TestPage from '../../utils/TestPage'
 import { appSelectors } from '../app'
 
 export const getResultListByScraping = state => state.page.resultListByScraping

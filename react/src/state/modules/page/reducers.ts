@@ -111,11 +111,6 @@ const pageReducer = (state = initialState, action) => {
         ...state,
         isFetching: false,
       };
-    case types.SET_LIST_PAGE_URLS:
-      return {
-        ...state,
-        listPageUrls: action.payload.listPageUrls.slice()
-      }
     default:
       return state
 

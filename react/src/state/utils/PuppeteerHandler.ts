@@ -275,6 +275,14 @@ class PuppeteerHandler {
     return attrList
   }
 
+  async showAlert(text) {
+    await this.page.evaluate(
+      `(() => {
+        alert('${text}')
+      })()`
+    );
+  }
+
 }
 
 export default PuppeteerHandler;

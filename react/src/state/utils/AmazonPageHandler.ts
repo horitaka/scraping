@@ -1,14 +1,13 @@
-import PuppeteerHandler from './PuppeteerHandler';
+// import PuppeteerHandler from './PuppeteerHandler';
 import * as HtmlHandleUtility from './HtmlHandleUtility'
 import PageHandler from './PageHandler'
 
 class AmazonPageHandler extends PageHandler{
   // protected puppeteer;
 
-  constructor () {
-    super()
-    // this.puppeteer = new PuppeteerHandler();
-  }
+  // constructor () {
+  //   super()
+  // }
 
   async launch() {
     await super.launch()
@@ -18,7 +17,6 @@ class AmazonPageHandler extends PageHandler{
   async getDetailPageUrlList(productListPageUrl) {
     await this.puppeteer.movePageTo(productListPageUrl)
     // await this.puppeteer.scrollToBottom()
-
     const selector = '#search > div.s-desktop-width-max.s-desktop-content.sg-row > div.sg-col-20-of-24.sg-col-28-of-32.sg-col-16-of-20.sg-col.sg-col-32-of-36.sg-col-8-of-12.sg-col-12-of-16.sg-col-24-of-28 > div > span:nth-child(5) > div:nth-child(1)  h2 > a'
     const detailPageUrlList = await this.puppeteer.getAttrList(selector, 'href')
     return detailPageUrlList
@@ -32,7 +30,7 @@ class AmazonPageHandler extends PageHandler{
 
     let productPageUrlList = []
 
-    const result = await this.puppeteer.movePageTo(productListPageUrl)
+    await this.puppeteer.movePageTo(productListPageUrl)
     const productCount = await this.puppeteer.getChildElementCount('#mainResults')
 
     // for (let i=1; i <= productCount; i++) {
@@ -199,7 +197,7 @@ class AmazonPageHandler extends PageHandler{
     let asin = ''
     for (let i=1; i<=productDetailsCounts; i++) {
       const productDetailsText = await this.puppeteer.getText(`#detail_bullets_id > table > tbody > tr > td > div > ul > li:nth-child(${i})`)
-      if (productDetailsText.indexOf('ASIN') != -1) {
+      if (productDetailsText.indexOf('ASIN') !== -1) {
         asin = productDetailsText.replace(/ASIN:/g, '').trim()
         return asin
       }

@@ -40,10 +40,6 @@ export default function UrlInput(props) {
     setListPageUrls(newListPageUrls)
   }
 
-  const baseInput = (
-    <TextField label="URL入力" />
-  )
-
   const itemComponent = (
     <FormControl fullWidth>
     {

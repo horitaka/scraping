@@ -80,7 +80,7 @@ class TestPage {
     let asin = ''
     for (let i=1; i<=productDetailsCounts; i++) {
       const productDetailsText = await this.puppeteer.getText(`#detail_bullets_id > table > tbody > tr > td > div > ul > li:nth-child(${i})`)
-      if (productDetailsText.indexOf('ASIN') != -1) {
+      if (productDetailsText.indexOf('ASIN') !== -1) {
         asin = productDetailsText.replace(/ASIN:/g, '').trim()
         return asin
       }

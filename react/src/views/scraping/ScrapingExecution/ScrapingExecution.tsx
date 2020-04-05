@@ -22,7 +22,7 @@ export default function ScrapingExecution(props) {
     runScraping()
   }
 
-  const handleStopButtonClick = () => {
+  const handlePauseButtonClick = () => {
 
   }
 
@@ -40,7 +40,7 @@ export default function ScrapingExecution(props) {
         </Button>
       </Grid>
       <Grid container item xs justify="center">
-        <Button variant="contained" fullWidth color="primary" onClick={handleStopButtonClick}>
+        <Button variant="contained" fullWidth color="primary" onClick={handlePauseButtonClick}>
           <Typography>一時停止</Typography>
         </Button>
       </Grid>

@@ -1,10 +1,10 @@
-import * as types from './types'
+// import * as types from './types'
 
 /*
 State shape
 
 app: {
-  pageType: 
+  pageType:
 }
 */
 
