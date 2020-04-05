@@ -4,6 +4,7 @@ import * as types from './types'
 State shape
 
 page: {
+  searchKeyword: string
   url: string, // ←　不要?
   listPageUrls: [],
   detailPageUrls: {
@@ -37,6 +38,7 @@ page: {
 */
 
 const initialState = {
+  searchKeyword: '',
   listPageUrls: [],
   detailPageUrls: {},
   isFetching : false,
@@ -49,6 +51,12 @@ const initialState = {
 
 const pageReducer = (state = initialState, action) => {
   switch (action.type) {
+    case types.SET_SEARCH_KEYWORD:
+      return {
+        ...state,
+        searchKeyword: action.payload.searchKeyword,
+      }
+
     case types.RUN_SCRAPING:
       // const validUrls = action.payload.url.filter(url => url !== '').length
       return {

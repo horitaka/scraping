@@ -10,7 +10,7 @@ import {
 	resetDetailPageProgress,
 	updateDetailPageProgress,
 } from './operations'
-import { getListPageUrls } from './selectors'
+import { getSearchKeyword, getListPageUrls } from './selectors'
 import { appSelectors } from '../app'
 
 export default function* saga() {
@@ -35,7 +35,8 @@ function* runScrapingMain() {
 	yield call(pageHandler.login.bind(pageHandler))
 
 	// 検索
-	yield call(pageHandler.search.bind(pageHandler))
+	const searchKeyword = yield select(getSearchKeyword)
+	yield call(pageHandler.search.bind(pageHandler, searchKeyword))
 
 	// 一覧ページのURLのリストを取得
 	const listPageUrls = yield select(getListPageUrls)

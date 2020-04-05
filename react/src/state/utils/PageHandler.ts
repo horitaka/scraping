@@ -19,7 +19,7 @@ class PageHandler {
 
   }
 
-  async search(searchKeyword='', searchKeywordSelector='') {
+  async search(searchKeyword='') {
 
   }
 

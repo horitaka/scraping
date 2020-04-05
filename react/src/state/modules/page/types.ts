@@ -1,3 +1,5 @@
+export const SET_SEARCH_KEYWORD = 'web-page-analyze/page/SET_SEARCH_KEYWORD';
+
 export const RUN_SCRAPING = 'web-page-analyze/page/RUN_SCRAPING';
 export const RUN_SCRAPING_FINISHED = 'web-page-analyze/page/RUN_SCRAPING_FINISHED';
 

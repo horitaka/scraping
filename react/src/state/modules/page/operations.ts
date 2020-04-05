@@ -1,4 +1,6 @@
 import {
+  setSearchKeyword,
+
   runScraping,
   runScrapingSuccess,
   runScrapingPageFail,
@@ -24,6 +26,8 @@ const runScrapingFinished = (isSuccess) => {
 }
 
 export {
+  setSearchKeyword,
+  
   runScraping,
   runScrapingFinished,
 

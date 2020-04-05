@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
 import UrlInput from './UrlInput'
+import SearchBox from './SearchBox'
 import ScrapingExecution from './ScrapingExecution'
 import ScrapingResult from './ScrapingResult'
 
@@ -33,6 +34,7 @@ export default function ScrapingMain() {
         alignItems="flex-start"
       >
         <UrlInput />
+        <SearchBox />
         <ScrapingExecution />
         <ScrapingResult />
       </Grid>

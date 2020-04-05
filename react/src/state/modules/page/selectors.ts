@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 
 import { appSelectors } from '../app'
 
+export const getSearchKeyword = state => state.page.searchKeyword
 export const getResultListByScraping = state => state.page.resultListByScraping
 export const getListPageUrls = state => state.page.listPageUrls
 export const getDetailPageUrls = state => state.page.detailPageUrls

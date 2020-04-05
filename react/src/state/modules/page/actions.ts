@@ -1,5 +1,12 @@
 import * as types from './types'
 
+export const setSearchKeyword = (searchKeyword) => ({
+  type: types.SET_SEARCH_KEYWORD,
+  payload: {
+    searchKeyword: searchKeyword,
+  }
+})
+
 export const runScraping = () => ({
   type: types.RUN_SCRAPING,
 })
