@@ -9,5 +9,8 @@
     "build": "npm run --prefix ./react build && cp -rf ./react/build ./electron/",
     "package": "npm run build && npm run --prefix ./electron package",
     "package-win": "npm run build && npm run --prefix ./electron package-win"
+  },
+  "dependencies": {
+    "react-router-dom": "^5.1.2"
   }
 }

@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 
-import BaseLayout from '../BaseLayout'
+import BaseCardLayout from '../../common/BaseCardLayout'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -61,7 +61,7 @@ export default function UrlInput(props) {
 
   return (
     <Grid item xs={12}>
-      <BaseLayout title="URL" itemComponent={itemComponent} />
+      <BaseCardLayout title="URL" itemComponent={itemComponent} />
     </Grid>
   );
 }

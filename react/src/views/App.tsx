@@ -1,10 +1,11 @@
 import React from 'react';
+import { BrowserRouter as Router } from "react-router-dom";
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import TwoPaneLayout from './TwoPaneLayouts'
-import Settings from './settings/Settings'
-import ScrapingMain from './scraping/ScrapingMain'
+import MainPanel from './MainPanel'
+import NavigationPanel from './navigation/NavigationPanel'
 
 const theme = createMuiTheme({
   palette: {
@@ -26,12 +27,14 @@ const theme = createMuiTheme({
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <TwoPaneLayout
-        leftComponent={<Settings />}
-        rightComponent={<ScrapingMain />}
-      />
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <TwoPaneLayout
+          leftComponent={<NavigationPanel />}
+          rightComponent={<MainPanel />}
+        />
+      </ThemeProvider>
+    </Router>
   );
 }
 

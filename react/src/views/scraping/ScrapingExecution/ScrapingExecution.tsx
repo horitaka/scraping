@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import BaseLayout from '../BaseLayout'
+import BaseCardLayout from '../../common/BaseCardLayout'
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -49,7 +49,7 @@ export default function ScrapingExecution(props) {
 
   return (
     <Grid item xs={12}>
-      <BaseLayout title="スクレイピング" itemComponent={itemComponent} />
+      <BaseCardLayout title="スクレイピング" itemComponent={itemComponent} />
     </Grid>
   );
 }

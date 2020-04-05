@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function BaseLayout(props) {
+function BaseCardLayout(props) {
   const classes = useStyles();
   const { title, itemComponent } = props
 
@@ -27,4 +27,4 @@ function BaseLayout(props) {
   );
 }
 
-export default BaseLayout;
+export default BaseCardLayout;

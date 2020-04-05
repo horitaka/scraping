@@ -28,13 +28,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function SearchBox(props) {
-  const { searchKeyword, setSearchKeyword } = props
+export default function LoginInput(props) {
+  const { listPageUrls, setListPageUrls } = props
   const classes = useStyles();
-  const labels = ['検索キーワードを入力']
+  const labels = ['ログイン用URL', 'ユーザーID', 'パスワード']
 
-  const handleKewwordChange = (event) => {
-    setSearchKeyword(event.target.value)
+  const handleUrlChange = (event, index) => {
+    const newListPageUrls = listPageUrls.slice()
+    newListPageUrls[index] = event.target.value
+    setListPageUrls(newListPageUrls)
   }
 
   const itemComponent = (
@@ -45,10 +47,10 @@ export default function SearchBox(props) {
           <TextField
             key={index}
             label={label}
-            value={searchKeyword}
+            value={listPageUrls}
             fullWidth
             className={classes.textField}
-            onChange={handleKewwordChange}
+            onChange={(event) => handleUrlChange(event, index)}
           />
         )
       })
@@ -58,7 +60,7 @@ export default function SearchBox(props) {
 
   return (
     <Grid item xs={12}>
-      <BaseCardLayout title="検索" itemComponent={itemComponent} />
+      <BaseCardLayout title="ログイン情報" itemComponent={itemComponent} />
     </Grid>
   );
 }
